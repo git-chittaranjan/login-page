@@ -46,6 +46,8 @@ npm install react-router-dom
 npm install yup
 npm install formik
 npm install jwt-decode
+npm install react-icons
+npm install lucide-react
 
 # Code Checked
 1. Public Folder
