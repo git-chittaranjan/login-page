@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaFacebook, FaYoutube } f
 
 const Footer = () => {
     return (
-        <footer className="bg-black text-white py-8 md:py-6 border-t-2 border-t-gray-700 mt-auto">
+        <footer className="bg-black text-white pt-6 pb-8 border-t-2 border-t-gray-700">
             <div className="container mx-auto text-center space-y-2">
 
                 {/* Copyright Section */}
@@ -17,6 +17,14 @@ const Footer = () => {
                 {/* Socail Links */}
                 <div className="flex justify-center space-x-6 text-xl text-white">
                     <a
+                        href="https://www.linkedin.com/in/chittaranjan-saha/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transform transition duration-300 hover:scale-135 text-blue-500 hover:text-blue-500"
+                    >
+                        <FaLinkedin />
+                    </a>
+                    <a
                         href="https://github.com/git-chittaranjan"
                         target="_blank"
                         rel="noreferrer"
@@ -25,18 +33,10 @@ const Footer = () => {
                         <FaGithub />
                     </a>
                     <a
-                        href="https://www.linkedin.com/in/chittaranjan-saha/"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="transform transition duration-300 hover:scale-135 hover:text-blue-500"
-                    >
-                        <FaLinkedin />
-                    </a>
-                    <a
                         href="https://x.com/"
                         target="_blank"
                         rel="noreferrer"
-                        className="transform transition duration-300 hover:scale-135 hover:text-sky-500"
+                        className="transform transition duration-300 hover:scale-135 text-sky-500 hover:text-sky-500"
                     >
                         <FaTwitter />
                     </a>
@@ -44,7 +44,7 @@ const Footer = () => {
                         href="https://instagram.com/"
                         target="_blank"
                         rel="noreferrer"
-                        className="transform transition duration-300 hover:scale-135 hover:text-pink-500"
+                        className="transform transition duration-300 hover:scale-135 text-pink-500 hover:text-pink-500"
                     >
                         <FaInstagram />
                     </a>
@@ -52,7 +52,7 @@ const Footer = () => {
                         href="https://facebook.com/"
                         target="_blank"
                         rel="noreferrer"
-                        className="transform transition duration-300 hover:scale-135 hover:text-blue-600"
+                        className="transform transition duration-300 hover:scale-135 text-blue-600 hover:text-blue-600"
                     >
                         <FaFacebook />
                     </a>
@@ -60,7 +60,7 @@ const Footer = () => {
                         href="https://youtube.com/"
                         target="_blank"
                         rel="noreferrer"
-                        className="transform transition duration-300 hover:scale-135 hover:text-red-700"
+                        className="transform transition duration-300 hover:scale-135 text-red-700 hover:text-red-700"
                     >
                         <FaYoutube />
                     </a>
