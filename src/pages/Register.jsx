@@ -73,10 +73,13 @@ const Register = () => {
             <div
                 className="min-h-screen w-full flex flex-col bg-cover bg-center"
                 style={{
-                    backgroundImage: `url('/assets/register_bg_full1.png')` // Background image for the login page
+                    backgroundImage: `url('/assets/register_bg_full.png')` // Background image for the login page
                 }}
             >
-                <div className="flex flex-1 items-center justify-center">
+                {/* Black transparent overlay */}
+                <div className="absolute inset-0 bg-black/50 md:bg-black/70 lg:bg-black/85"></div>
+
+                <div className="flex flex-1 items-center justify-center relative z-10">
 
                     {/* Main container with two sections */}
                     <div className="flex max-w-5xl mx-auto pt-12">
@@ -89,8 +92,11 @@ const Register = () => {
                                 className="w-full h-full object-cover rounded-l-xl"
                             />
 
+                            {/* Black transparent overlay */}
+                            <div className="absolute inset-0 bg-black/30 z-20"></div>
+
                             {/* Overlay text (optional) */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+                            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center">
                                 <div className="space-y-4 max-w-lg">
                                     <div className="text-5xl font-semibold text-white drop-shadow-lg">
                                         Sign up now!
