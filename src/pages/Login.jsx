@@ -69,10 +69,12 @@ const Login = () => {
             <Navbar title="Register" url="/register" />
 
             <div
-                className="min-h-screen w-full flex flex-col bg-cover bg-center bg-black"
-                // style={{
-                //     backgroundImage: `url('/assets/login_bg_full.png')` // Background image for the login page
-                // }}
+                className="
+    min-h-screen w-full flex flex-col
+    bg-cover bg-center bg-black
+    bg-[url('/assets/login_bg_full.png')]   /* show on small screens */
+    md:bg-none                               /* hide from md and above */
+  "
             >
                 <div className="flex flex-1 items-center justify-center">
 
