@@ -71,7 +71,7 @@ const Register = () => {
             <Navbar title="Login" url="/login" />
 
             <div
-                className="min-h-screen w-full flex flex-col bg-cover bg-center"
+                className="relative min-h-screen w-full flex flex-col bg-cover bg-center"
                 style={{
                     backgroundImage: `url('/assets/register_bg_full.png')` // Background image for the login page
                 }}
