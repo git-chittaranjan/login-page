@@ -30,7 +30,7 @@ const Navbar = () => {
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex space-x-6 text-sm font-bold text-white ml-auto mr-6">
                     <a href="/dashboard" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Home</a>
-                    <a href="#contact" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Connect Me</a>
+                    <a href="/contact" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Connect Me</a>
                     <a href="#articles" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Articles</a>
                 </nav>
 
@@ -47,7 +47,7 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden px-4 pb-4 space-y-2 text-sm font-medium text-white">
                     <a href="/dashboard" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Home</a>
-                    <a href="#contact" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Connect Me</a>
+                    <a href="/contact" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Connect Me</a>
                     <a href="#articles" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Articles</a>
                     <a href="#logout" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Logout</a>
                 </div>

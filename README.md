@@ -51,6 +51,7 @@ npm install lucide-react
 npm install react-icons/fi
 npm install framer-motion
 npm install react-toas
+npm install @emailjs/browser
 
 # Code Checked
 1. Public Folder
