@@ -22,7 +22,7 @@ const Navbar = ({ title, url }) => {
                         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                     </button>
 
-                    <a href="https://www.chittaranjansaha.com/" className="sm:text-xl md:text-2xl font-bold text-white">
+                    <a href="/" className="sm:text-xl md:text-2xl font-bold text-white">
                         Chittaranjan Saha
                     </a>
                 </div>
@@ -47,8 +47,12 @@ const Navbar = ({ title, url }) => {
             {isOpen && (
                 <div className="md:hidden px-4 pb-4 space-y-2 text-sm font-medium text-white">
                     <a href="https://www.chittaranjansaha.com/" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Home</a>
-                    <a href="/register" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Register</a>
-                    <a href="/login" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">Login</a>
+                    <Link to="/register" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">
+                        Register
+                    </Link>
+                    <Link to="/login" className="block px-4 text-white hover:text-orange-500 active:bg-gray-600 rounded-2xl">
+                        Login
+                    </Link>
                 </div>
             )}
         </header>

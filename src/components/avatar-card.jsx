@@ -53,7 +53,7 @@ const AvatarButton = () => {
             {isCardOpen && (
                 <div
                     ref={cardRef}
-                    className="absolute z-20 mt-2 w-64 right-0 bg-gray-900 rounded-lg shadow-lg p-4 border border-gray-400"
+                    className="absolute z-20 mt-2 w-66 right-0 bg-gray-900 rounded-lg shadow-lg p-4 border border-gray-400"
                 >
                     <div className="flex items-center space-x-4">
                         <img
@@ -76,7 +76,7 @@ const AvatarButton = () => {
                             <li>React</li>
                             <li>Java Script</li>
                             <li>SQL Server</li>
-                            <li>Project Management</li>
+                            <li>Project Manager</li>
                         </ul>
                     </div>
                 </div>

@@ -48,6 +48,9 @@ npm install formik
 npm install jwt-decode
 npm install react-icons
 npm install lucide-react
+npm install react-icons/fi
+npm install framer-motion
+npm install react-toas
 
 # Code Checked
 1. Public Folder

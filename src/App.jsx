@@ -14,7 +14,7 @@ const App = () => (
         {/* Public routes */}
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard name="Chittaranjan Saha" />} />
 
         {/* Protected routes */}
         {/* <Route element={<ProtectedRoute />}>
