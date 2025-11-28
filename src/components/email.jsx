@@ -47,31 +47,32 @@ const GetInTouch = () => {
     };
 
     return (
-        <div className='bg-black pt-20 md:pt-0 md:pb-0 lg:pt-30 pb-10 lg:pb-20'>
+        <div className='bg-black pt-20 md:pt-0 md:pb-0 lg:pt-40 pb-10 lg:pb-30'>
 
             <div className="min-h-screen flex flex-col items-center justify-center">
                 <div className="max-w-5xl w-full p-8">
 
-                    <div>
-                        <h2 className="text-3xl font-bold text-white text-center pb-1">
-                            Get In Touch
+                    <div className="mb-8 md:mb-8 lg:mb-10">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white font-serif text-center">
+                            Contact Me
                         </h2>
+                    </div>
+
+                    <div className='mb-8'>
                         <div
-                            className="w-48 h-1 rounded mx-auto"
+                            className="w-3/4 lg:w-3/5 h-1 rounded mx-auto"
                             style={{
                                 background: "linear-gradient(to right, black, white, black)"
                             }}
                         ></div>
+                        <p className="text-gray-300 text-sm font-semibold text-center pt-2 font-serif">
+                            Have a project in mind or simply wish to get in touch?
+                            <br />
+                            Feel free to connect me — whether for a quick chat or a detailed discussion, I’d love to hear from you
+                        </p>
                     </div>
 
-
-                    <p className="text-gray-300 text-sm font-semibold mt-8 mb-8 text-center pt-3 lg:pt-0">
-                        Have a project in mind or simply wish to get in touch?
-                        <br />
-                        Feel free to send me a message! Whether it's a quick chat or a detailed discussion, I would love to hear from you.
-                    </p>
-
-                    <div className='max-w-xl mx-auto pt-10'>
+                    <div className='max-w-lg mx-auto pt-10'>
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className='pt-4'>
                                 <label className="block text-sm font-bold text-white">Full Name : </label>

@@ -36,9 +36,9 @@ const Dashboard = () => {
 
                     <div className="flex flex-col w-full pt-2 pb-15 lg:pb-20 px-2">
                         {/* Top Div */}
-                        <div className="w-full flex flex-col items-center justify-center text-center mb-8 md:mb-8 lg:mb-0">
+                        <div className="w-full flex flex-col items-center justify-center text-center mb-8 md:mb-8 lg:mb-10">
                             <h2 className="text-3xl md:text-4xl font-bold text-white font-serif">
-                                Hi, {name}
+                                Hi, Chittaranjan Saha
                             </h2>
                             <h4 className="text-lg md:text-xl pt-3 font-mono text-gray-200 lg:text-gray-300">
                                 Welcome to my Workspace
@@ -46,7 +46,7 @@ const Dashboard = () => {
                         </div>
 
                         {/* Below Div */}
-                        <div className="w-full lg:w-4/5 mx-auto text-center lg:pt-10">
+                        <div className="w-full lg:w-4/5 mx-auto text-center">
                             <div
                                 className="w-3/4 lg:w-3/5 h-1 rounded mx-auto"
                                 style={{
