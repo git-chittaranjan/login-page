@@ -47,32 +47,28 @@ const GetInTouch = () => {
     };
 
     return (
-        <div className='bg-black pt-20 md:pt-0 md:pb-0 lg:pt-40 pb-10 lg:pb-30'>
+        <div className=''>
+            <div
+                className="relative min-h-screen bg-cover bg-center ransition-all duration-1500"
+                style={{ backgroundImage: "url('/assets/contact.jpg')" }}
+            >
+                {/* Overlay a semi-transparent layer above the background image but below the content. */}
+                <div className="absolute inset-0 bg-black/60"></div>
 
-            <div className="min-h-screen flex flex-col items-center justify-center">
-                <div className="max-w-5xl w-full p-8">
+                <div className="relative z-10 min-h-screen flex flex-col items-center justify-center pt-32 pb-20 lg:pt-32 lg:pb-32">
+                    <div className="max-w-2xl w-full p-8">
 
-                    <div className="mb-8 md:mb-8 lg:mb-10">
-                        <h2 className="text-3xl md:text-4xl font-bold text-white font-serif text-center">
-                            Contact Me
-                        </h2>
-                    </div>
+                        <div className="text-center">
+                            <h2 className="text-4xl font-bold text-white tracking-wide drop-shadow-lg">Get In Touch</h2>
+                            <div className="w-60 h-1 bg-cyan-500 mt-3 rounded-full mx-auto shadow-[0_0_15px_rgba(0,255,255,0.6)]"></div>
+                        </div>
 
-                    <div className='mb-8'>
-                        <div
-                            className="w-3/4 lg:w-3/5 h-1 rounded mx-auto"
-                            style={{
-                                background: "linear-gradient(to right, black, white, black)"
-                            }}
-                        ></div>
-                        <p className="text-gray-300 text-sm font-semibold text-center pt-2 font-serif">
-                            Have a project in mind or simply wish to get in touch?
-                            <br />
-                            Feel free to connect me — whether for a quick chat or a detailed discussion, I’d love to hear from you
+                        <p className="text-gray-300 text-base font-medium leading-relaxed mt-8 mb-16 text-center lg:px-20">
+                            Have an idea or need help building something?<br />
+                            Whether it's a quick chat or a detailed discussion, reach out anytime—I’m always open to meaningful conversations.
                         </p>
-                    </div>
 
-                    <div className='max-w-lg mx-auto pt-10'>
+
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className='pt-4'>
                                 <label className="block text-sm font-bold text-white">Full Name : </label>
@@ -125,11 +121,11 @@ const GetInTouch = () => {
                                 />
                             </div>
 
-                            <div className="flex justify-center pt-6 md:pt-0">
+                            <div className="flex justify-center pt-6">
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="max-w-2xs w-full bg-transparent border-4 border-cyan-500 text-cyan-500 font-bold py-2 rounded-md shadow-md hover:bg-cyan-500 hover:text-white transition-colors duration-1000"
+                                    className="max-w-xs w-full py-3 font-semibold rounded-xl border-2 border-cyan-500 text-cyan-400 bg-black shadow-[0_0_20px_rgba(0,255,255,0.25)] hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_35px_rgba(0,255,255,0.6)] hover:-translate-y-1 transition-all duration-500 active:scale-95 disabled:opacity-50"
                                 >
                                     {loading ? 'Sending...' : 'Send Message'}
                                 </button>
@@ -139,10 +135,8 @@ const GetInTouch = () => {
                         </form>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
-
-            <ToastContainer />
-
         </div>
     );
 };
