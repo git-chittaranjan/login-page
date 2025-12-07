@@ -8,67 +8,31 @@ const Dashboard = () => {
     const { user, logout } = useAuth();
 
     return (
-        // <div className="max-w-md mx-auto mt-10 p-6 border rounded">
-        //     <h2 className="text-2xl mb-4">Dashboard</h2>
-        //     {user ? (
-        //         <>
-        //             {/* <p><strong>Welcome,</strong> {user.firstName} {user.lastName}</p>
-        //             <p><strong>Email:</strong> {user.email}</p> */}
-
-        //             {/* show other user info as needed */}
-        //             <button
-        //                 onClick={logout}
-        //                 className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-        //             >
-        //                 Logout
-        //             </button>
-        //         </>
-        //     ) : (
-        //         <p>Loading user info...</p>
-        //     )}
-        // </div>
-
         <div>
             <DashboardNavbar />
 
-            <div className="pt-30 pb-20 lg:pt-30 lg:pb-25 bg-black w-full">
-                <div className="px-4 max-w-7xl mx-auto">
+            <div className="pt-20 lg:pt-20 pb-20 lg:pb-25 bg-black w-full">
+                <div className="relative w-full py-10 bg-center bg-cover bg-no-repeat overflow-hidden" style={{ backgroundImage: "url('assets/dashboard-bg.png')" }}>
+                    {/* Overlay a semi-transparent layer above the background image but below the content. */}
+                    <div className="absolute inset-0 bg-black/50"></div>
 
-                    <div className="flex flex-col w-full pt-2 pb-15 lg:pb-20 px-2">
-                        {/* Top Div */}
-                        <div className="w-full flex flex-col items-center justify-center text-center mb-8 md:mb-8 lg:mb-10">
-                            <h2 className="text-3xl md:text-4xl font-bold text-white font-serif">
-                                Hi, Chittaranjan Saha
-                            </h2>
-                            <h4 className="text-lg md:text-xl pt-3 font-mono text-gray-200 lg:text-gray-300">
-                                Welcome to my Workspace
-                            </h4>
-                        </div>
+                    <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto px-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white">Hi, Chittaranjan Saha</h2>
+                        <h4 className="text-lg md:text-xl text-gray-300 mt-2 md:mt-3 tracking-wide font-mono">Welcome to my Workspace</h4>
 
-                        {/* Below Div */}
-                        <div className="w-full lg:w-4/5 mx-auto text-center">
-                            <div
-                                className="w-3/4 lg:w-3/5 h-1 rounded mx-auto"
-                                style={{
-                                    background: "linear-gradient(to right, black, white, black)"
-                                }}
-                            ></div>
+                        <div className="w-32 md:w-36 lg:w-40 h-1 bg-teal-600 mt-6 rounded-full shadow-[0_0_15px_rgba(0,255,255,0.5)]"></div>
 
-                            <div className="text-gray-100 mt-2 md:mt-4 lg:mt-2 font-serif text-justify lg:text-center leading-relaxed">
-                                <p>
-                                    Discover a range of practical and innovative projects built across
-                                    frontend, backend and full-stack architectures. Every project reflects
-                                    continuous learning and a drive to build meaningful digital solutions
-                                    with modern technologies.
-                                </p>
-                            </div>
-                        </div>
+                        <p className="text-gray-200 mt-8 text-base md:text-lg leading-relaxed font-medium max-w-3xl">
+                            Discover a range of practical and innovative projects built across frontend, backend and full-stack architectures. Every project reflects continuous learning and a drive to build meaningful digital solutions with modern technologies.
+                        </p>
                     </div>
 
-                    <div>
-                        <ProjectGrid name="Saheb Saha" />
-                    </div>
                 </div>
+
+                <div className="mt-16 px-8 max-w-7xl mx-auto">
+                    <ProjectGrid name="Saheb Saha" />
+                </div>
+
             </div>
 
             <Footer />
