@@ -15,13 +15,15 @@ const projects = [
             "CSS",
             "JS"
         ],
-        image: "/assets/personal-website.png",
+        image: "/assets/projects/personal-website.png",
         visitLink: "https://www.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/personal-website",
+        enableVisit: true,
+        enableCode: true
     },
     {
         id: 2,
-        title: "Certification Verification Page",
+        title: "Certification Verification App",
         description: "Developed a web application for real-time certificate verification, enabling users to authenticate issued certificates via unique Certificate IDs or embedded QR codes. Built using Next.js and React, with dynamic PDF generation using pdf-lib and rendering through pdfjs-dist.",
         technologies: [
             "React",
@@ -31,9 +33,11 @@ const projects = [
             "pdfjs-dist",
             "ErrorBoundary"
         ],
-        image: "/assets/certificate-verification.png",
-        visitLink: "https://projects.certificate-verification.chittaranjansaha.com/?id=EMLC-0325-ETCUYZW0I1",
+        image: "/assets/projects/certificate-verification.jpg",
+        visitLink: "https://www.projects.certificate-verification.chittaranjansaha.com/?id=EMLC-0325-WWMPQO9L7X",
         codeLink: "https://github.com/git-chittaranjan/certificate-verification-app",
+        enableVisit: true,
+        enableCode: true
     },
     {
         id: 3,
@@ -46,12 +50,97 @@ const projects = [
             "react-pdf-table",
             "Fetch API"
         ],
-        image: "/assets/invoice.png",
-        visitLink: "#",
-        codeLink: "https://github.com/git-chittaranjan/invoice-pdf-generator",
+        image: "/assets/projects/invoice-generator.jpg",
+        visitLink: "https://www.projects.invoice-generator.chittaranjansaha.com/",
+        codeLink: "https://github.com/git-chittaranjan/invoice-generator",
+        enableVisit: true,
+        enableCode: true
     },
     {
         id: 4,
+        title: "QR Code Generator",
+        description: "This React project generates a customized downloadable PDF containing a QR code from a user-provided URL input. It uses react-qr-code, html-to-image, and pdf-lib to create and download the QR as a PDF.",
+        technologies: [
+            "React",
+            "Tailwind",
+            "pdf-lib",
+            "html-to-image",
+            "react-qr-code"
+        ],
+        image: "/assets/projects/qr-code-generator.jpg",
+        visitLink: "https://www.projects.qr-code-generator.chittaranjansaha.com/",
+        codeLink: "https://github.com/git-chittaranjan/qr-code-generator",
+        enableVisit: true,
+        enableCode: true
+    },
+    {
+        id: 5,
+        title: "Authenticated Application",
+        description: "This is a cloud-hosted, authenticated web application using SQL Server database, .NET for backend and Azure Cloud for hosting. It enables user registration, email-based OTP login, and provides a personalized dashboard upon successful authentication.",
+        technologies: [
+            "SQL Server",
+            "ASP.NET Core",
+            "React",
+            "Hashing & Salting",
+            "OTP Authentication"
+        ],
+        image: "/assets/projects/login-page.jpg",
+        visitLink: "https://www.app.chittaranjansaha.com/",
+        codeLink: "https://github.com/git-chittaranjan/login-page",
+        enableVisit: true,
+        enableCode: true
+    },
+    {
+        id: 6,
+        title: "UUID Generator Application",
+        description: "A React-based Unique ID Generator that uses a custom algorithm, combining the current timestamp with random alphanumeric values to create unique IDs. It provides a clean interface where users can instantly create, view, and copy unique identifiers effortlessly.",
+        technologies: [
+            "React",
+            "Tailwind",
+            "Math.random()",
+            "Date.now()"
+        ],
+        image: "/assets/projects/uuid-generator.png",
+        visitLink: "https://www.projects.uuid-generator.chittaranjansaha.com/",
+        codeLink: "https://github.com/git-chittaranjan/uuid-generator",
+        enableVisit: true,
+        enableCode: true
+    },
+    {
+        id: 7,
+        title: "Certificate PDF Generator",
+        description: "Built a React-based certificate generator that dynamically injects user data, embeds a QR code, and produces a styled PDF using pdf-lib.  It embeds student names, course details, and course completion date directly onto certificate templates for instant download.",
+        technologies: [
+            "React",
+            "pdf-lib",
+            "react-qr-code",
+            "JS (ES6+)"
+        ],
+        image: "/assets/projects/certificate-generator.jpg",
+        visitLink: "https://www.projects.certificate-generator.chittaranjansaha.com/",
+        codeLink: "https://github.com/git-chittaranjan/certificate-generator",
+        enableVisit: true,
+        enableCode: true
+    },
+    {
+        id: 8,
+        title: "Offer Management System",
+        description: "This project is a Personalized Offer Management System built with ASP.NET Core Web APIs, React, and SQL Server. It dynamically delivers customized user offers based on preferences and data, ensuring an engaging and data-driven experience.",
+        technologies: [
+            "SQL Server",
+            "ASP.NET Core",
+            "React",
+            "ADO.NET",
+            "Offers"
+        ],
+        image: "/assets/projects/offers-implementation.png",
+        visitLink: "https://www.projects.offers-implementation.chittaranjansaha.com/",
+        codeLink: "https://github.com/git-chittaranjan/offers-implementation-api",
+        enableVisit: true,
+        enableCode: true
+    },
+    {
+        id: 9,
         title: "CRUD Application using MVC",
         description: "Developed a web-based CRUD (Create, Read, Update, Delete) application using ASP.NET MVC and Entity Framework. Implemented layered architecture with proper separation of concerns, integrated SQL Server database interactions using EF Code First approach.",
         technologies: [
@@ -60,12 +149,14 @@ const projects = [
             "SQL Server",
             "Bootstrap"
         ],
-        image: "/assets/mvc.png",
-        visitLink: "#",
-        codeLink: "#",
+        image: "/assets/projects/mvc.png",
+        visitLink: "",
+        codeLink: "",
+        enableVisit: false,
+        enableCode: false
     },
     {
-        id: 5,
+        id: 10,
         title: "Online Shopping Cart Application",
         description: "Developed a responsive online shopping cart application using React, incorporating React Router for seamless navigation, Context API for efficient state management across components, and Firebase for real-time database and authentication support.",
         technologies: [
@@ -75,12 +166,14 @@ const projects = [
             "Context API",
             "API Integration"
         ],
-        image: "/assets/shopping.png",
-        visitLink: "#",
+        image: "/assets/projects/shopping.png",
+        visitLink: "",
         codeLink: "https://github.com/git-chittaranjan/shopping-cart",
+        enableVisit: false,
+        enableCode: false
     },
     {
-        id: 6,
+        id: 11,
         title: "Blogging Application - WordPress",
         description: "An intuitive blogging application built with WordPress, offering seamless content management, customizable themes and responsive design, enabling to create and share engaging blogs effortlessly.",
         technologies: [
@@ -88,9 +181,11 @@ const projects = [
             "XAMPP Server",
             "MySql",
         ],
-        image: "/assets/word-press.png",
+        image: "/assets/projects/word-press.png",
         visitLink: "",
         codeLink: "",
+        enableVisit: false,
+        enableCode: false
     },
 ];
 
@@ -140,10 +235,14 @@ export default function ProjectGrid() {
                             </div>
                             <div className="flex space-x-4 mt-auto">
                                 <a
-                                    href={project.visitLink}
+                                    href={project.enableVisit ? project.visitLink : undefined}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2 px-4 rounded-xl text-center"
+                                    className={`flex items-center justify-center gap-2 flex-1 font-bold py-2 px-4 rounded-xl text-center
+                                        ${project.enableVisit
+                                            ? "bg-amber-500 hover:bg-amber-600 text-black cursor-pointer"
+                                            : "bg-gray-400 text-gray-700 cursor-not-allowed pointer-events-none"
+                                        }`}
                                 >
                                     <span className="flex items-center justify-center w-6 h-6 rounded-full bg-black bg-opacity-20">
                                         <FiGlobe size={16} strokeWidth={2} className="text-white" />
@@ -151,11 +250,14 @@ export default function ProjectGrid() {
                                     Visit
                                 </a>
                                 <a
-                                    href={project.codeLink}
+                                    href={project.enableCode ? project.codeLink : undefined}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2 px-4 rounded-xl text-center"
-                                >
+                                    className={`flex items-center justify-center gap-2 flex-1 font-bold py-2 px-4 rounded-xl text-center
+                                        ${project.enableVisit
+                                            ? "bg-amber-500 hover:bg-amber-600 text-black cursor-pointer"
+                                            : "bg-gray-400 text-gray-700 cursor-not-allowed pointer-events-none"
+                                        }`}                                >
                                     <div className="bg-black p-1 rounded-full">
                                         <Github strokeWidth={3} className="w-4 h-4 text-white font-bold" />
                                     </div>
