@@ -15,7 +15,7 @@ const projects = [
             "CSS",
             "JS"
         ],
-        image: "/assets/projects/personal-website.png",
+        image: "/assets/dashboard-projects/personal-website.png",
         visitLink: "https://www.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/personal-website",
         enableVisit: true,
@@ -33,7 +33,7 @@ const projects = [
             "pdfjs-dist",
             "ErrorBoundary"
         ],
-        image: "/assets/projects/certificate-verification.jpg",
+        image: "/assets/dashboard-projects/certificate-verification.jpg",
         visitLink: "https://www.projects.certificate-verification.chittaranjansaha.com/?id=EMLC-0325-WWMPQO9L7X",
         codeLink: "https://github.com/git-chittaranjan/certificate-verification-app",
         enableVisit: true,
@@ -50,7 +50,7 @@ const projects = [
             "react-pdf-table",
             "Fetch API"
         ],
-        image: "/assets/projects/invoice-generator.jpg",
+        image: "/assets/dashboard-projects/invoice-generator.jpg",
         visitLink: "https://www.projects.invoice-generator.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/invoice-generator",
         enableVisit: true,
@@ -67,7 +67,7 @@ const projects = [
             "html-to-image",
             "react-qr-code"
         ],
-        image: "/assets/projects/qr-code-generator.jpg",
+        image: "/assets/dashboard-projects/qr-code-generator.jpg",
         visitLink: "https://www.projects.qr-code-generator.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/qr-code-generator",
         enableVisit: true,
@@ -84,7 +84,7 @@ const projects = [
             "Hashing & Salting",
             "OTP Authentication"
         ],
-        image: "/assets/projects/login-page.jpg",
+        image: "/assets/dashboard-projects/login-page.jpg",
         visitLink: "https://www.app.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/login-page",
         enableVisit: true,
@@ -100,7 +100,7 @@ const projects = [
             "Math.random()",
             "Date.now()"
         ],
-        image: "/assets/projects/uuid-generator.png",
+        image: "/assets/dashboard-projects/uuid-generator.png",
         visitLink: "https://www.projects.uuid-generator.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/uuid-generator",
         enableVisit: true,
@@ -116,7 +116,7 @@ const projects = [
             "react-qr-code",
             "JS (ES6+)"
         ],
-        image: "/assets/projects/certificate-generator.jpg",
+        image: "/assets/dashboard-projects/certificate-generator.jpg",
         visitLink: "https://www.projects.certificate-generator.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/certificate-generator",
         enableVisit: true,
@@ -133,7 +133,7 @@ const projects = [
             "ADO.NET",
             "Offers"
         ],
-        image: "/assets/projects/offers-implementation.png",
+        image: "/assets/dashboard-projects/offers-implementation.png",
         visitLink: "https://www.projects.offers-implementation.chittaranjansaha.com/",
         codeLink: "https://github.com/git-chittaranjan/offers-implementation-api",
         enableVisit: true,
@@ -149,7 +149,7 @@ const projects = [
             "SQL Server",
             "Bootstrap"
         ],
-        image: "/assets/projects/mvc.png",
+        image: "/assets/dashboard-projects/mvc.png",
         visitLink: "",
         codeLink: "",
         enableVisit: false,
@@ -166,7 +166,7 @@ const projects = [
             "Context API",
             "API Integration"
         ],
-        image: "/assets/projects/shopping.png",
+        image: "/assets/dashboard-projects/shopping.png",
         visitLink: "",
         codeLink: "https://github.com/git-chittaranjan/shopping-cart",
         enableVisit: false,
@@ -181,7 +181,7 @@ const projects = [
             "XAMPP Server",
             "MySql",
         ],
-        image: "/assets/projects/word-press.png",
+        image: "/assets/dashboard-projects/word-press.png",
         visitLink: "",
         codeLink: "",
         enableVisit: false,

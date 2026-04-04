@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import AvatarButton from './avatar-card';
-import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
