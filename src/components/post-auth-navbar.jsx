@@ -31,7 +31,7 @@ const Navbar = () => {
                 <nav className="hidden md:flex space-x-6 text-sm font-bold text-white ml-auto mr-6">
                     <a href="/dashboard" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Home</a>
                     <a href="/contact" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Connect Me</a>
-                    <a href="#articles" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Articles</a>
+                    <a href="#articles" className="hover:text-black hover:bg-gray-200 px-2 py-1 rounded">Profile</a>
                 </nav>
 
                 <div className="flex items-center space-x-4 md:space-x-8 text-sm font-bold">

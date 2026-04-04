@@ -1,4 +1,3 @@
-import React from "react";
 
 const InputField = ({ label, type = "text", name, value, onChange, error, rightElement, disabled = false, autoComplete, inputMode, placeholder, }) => {
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import InputField from '../components/InputField';
-import { registerSchema } from '../validation/schemas';
-import Navbar from '../components/navbar';
-import Footer from '../components/footer';
+import { useAuth } from '../../contexts/AuthContext';
+import InputField from '../../components/InputField';
+import { registerSchema } from './validation/schemas';
+import Navbar from '../../components/pre-auth-navbar';
+import Footer from '../../components/footer';
 
 const Register = () => {
     const { login } = useAuth();

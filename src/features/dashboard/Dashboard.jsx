@@ -1,8 +1,8 @@
 import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import ProjectGrid from '../components/projects.';
-import Footer from '../components/footer';
-import DashboardNavbar from '../components/dashboard-navbar';
+import { useAuth } from '../../contexts/AuthContext';
+import ProjectGrid from './components/projects.';
+import Footer from '../../components/footer';
+import DashboardNavbar from '../../components/post-auth-navbar';
 
 const Dashboard = () => {
     const { user, logout } = useAuth();

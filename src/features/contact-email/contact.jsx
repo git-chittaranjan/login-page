@@ -1,8 +1,8 @@
 
-import { useAuth } from '../contexts/AuthContext';
-import Footer from '../components/footer';
-import DashboardNavbar from '../components/dashboard-navbar';
-import GetInTouch from '../components/email';
+import { useAuth } from '../../contexts/AuthContext';
+import Footer from '../../components/footer';
+import DashboardNavbar from '../../components/post-auth-navbar';
+import GetInTouch from './components/email';
 
 const Contact = () => {
     const { user, logout } = useAuth();
