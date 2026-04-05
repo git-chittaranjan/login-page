@@ -1,5 +1,5 @@
 
-export const API_ENDPOINTS = {
+const API_ENDPOINTS = Object.freeze({
 
     AUTH: {
         REGISTER: "/api/auth/register",                     // POST
@@ -17,4 +17,6 @@ export const API_ENDPOINTS = {
         PATCH_USER: (id) => `/api/users/${id}`,             // PATCH
         DELETE_USER: (id) => `/api/users/${id}`,            // DELETE
     }
-};
+});
+
+export default API_ENDPOINTS;

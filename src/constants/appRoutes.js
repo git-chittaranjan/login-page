@@ -1,25 +1,29 @@
 
-export const APP_ROUTES = {
+const APP_ROUTES = Object.freeze({
 
-    // Public routes — accessible without authentication
+    // Dynamic redirection (Authenticated → /dashboard & Not authenticated → /login)
+    ROOT: "/",
+
+    // Public routes
     PUBLIC: {
-        HOME: "/",
         LOGIN: "/login",
         REGISTER: "/register",
         FORGOT_PASSWORD: "/forgot-password",
         RESET_PASSWORD: "/reset-password",
         UNAUTHORIZED: "/unauthorized",
+    },
+
+    // Protected routes
+    PRIVATE: {
+        DASHBOARD: "/dashboard",
+        PROFILE: "/profile",
+        PROFILE_UPDATE: "/profile/update",
+    },
+
+    // System routes
+    SYSTEM: {
         NOT_FOUND: "*",
     },
+});
 
-
-    
-    // Authenticated routes — require valid access token
-    DASHBOARD: {
-        HOME: "/dashboard",
-    },
-    PROFILE: {
-        VIEW: "/profile",
-        UPDATE: "/profile/update",
-    },
-};
+export default APP_ROUTES;
