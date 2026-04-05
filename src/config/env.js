@@ -1,5 +1,5 @@
 
-const _ENV = {
+const _ENV = Object.freeze({
     API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
     API_KEY: import.meta.env.VITE_API_KEY,
     APP_NAME: import.meta.env.VITE_APP_NAME,
@@ -10,7 +10,7 @@ const _ENV = {
     REQUEST_TIMEOUT_MS: Number(import.meta.env.VITE_REQUEST_TIMEOUT_MS),
     ACCESS_TOKEN_EXPIRY_MS: Number(import.meta.env.VITE_ACCESS_TOKEN_EXPIRY_MINUTES) * 60 * 1000,
     DEFAULT_PAGE_SIZE: Number(import.meta.env.VITE_DEFAULT_PAGE_SIZE),
-};
+});
 
 
 
