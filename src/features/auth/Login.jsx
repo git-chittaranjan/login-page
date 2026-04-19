@@ -1,237 +1,243 @@
+
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
 import InputField from "../../components/InputField";
-import { loginSchema } from "./validation/schemas";
 import Navbar from "../../components/pre-auth-navbar";
 import Footer from "../../components/footer";
 import { Eye, EyeOff } from "lucide-react";
+import { useLogin } from "./hooks/useLogin";
+
 
 const Login = () => {
 
-  // ==================== Hooks and States ====================
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    otp: "",
-  });
-  const [errors, setErrors] = useState({});
-  const [otpSent, setOtpSent] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    // ==================== Hooks and States ====================
+    const {
+        step,
+        STEP,
+        email,
+        isLoading,
+        error,
+        clearError,
+        submitCredentials,
+        submitOtp,
+        goBackToCredentials,
+    } = useLogin();
 
 
 
-  // ==================== Handlers ====================
-  const handleChange = (e) => {
-    setShowPassword(false);
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+    const [formData, setFormData] = useState({ email: "", password: "", otp_code: "" });
+    const [fieldErrors, setFieldErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
 
 
 
-  const handleSubmit = async (e) => {
+    // ==================== Handlers ====================
+    const handleChange = (e) => {
+        setShowPassword(false);
+        const { name, value } = e.target;
 
-    e.preventDefault();
-    setShowPassword(false);
-    setIsSubmitting(true);
-    setErrors({});
+        // OTP field: Digits only ("12a3#4" → "1234")
+        const sanitized = name === "otp_code" ? value.replace(/\D/g, "") : value;
 
-    try {
+        setFormData((prev) => ({ ...prev, [name]: sanitized }));
+    };
 
-      await loginSchema.validate(formData, { abortEarly: false }); //Fields validation using Yup
-
-      // Step 1: submit email/password to trigger OTP
-      if (!otpSent) {
+    const handleSubmit = async (e) => {
         
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout for the request
+        e.preventDefault();
+        setShowPassword(false);
+        setFieldErrors({});
 
-        try {
-          // Use Yup-validated output, not raw formData (email is trimmed + lowercased)
-          const validatedData = await loginSchema.validate(formData, { abortEarly: false });
+        if (step === STEP.CREDENTIALS) {
 
-          const res = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: validatedData.email,
-              password: validatedData.password,
-            }),
-            signal: controller.signal,          // abort on timeout
-          });
+            // Client-side Yup validation. Dynamic import, Loads loginSchema only when needed, Uses code-splitting / lazy loading
+            const { loginSchema } = await import("./validation/schemas");
 
-          clearTimeout(timeoutId);              // clear if request completes in time
+            try {
+                await loginSchema.validate(
+                    {
+                        email: formData.email,
+                        password: formData.password
+                    },
+                    { abortEarly: false } //Default: stops at first error. false - collects all errors
+                );
 
-          if (res.ok) {
-            setOtpSent(true);
-          } else {
-            const errorData = res.headers.get("content-type")?.includes("application/json")
-              ? await res.json()
-              : null;
-            setErrors({ form: errorData?.message || "Login failed. Please try again." });
-          }
-        } catch (err) {
-          if (err.name === "AbortError") {
-            setErrors({ form: "Request timed out. Please check your connection." });
-          } else {
-            throw err;
-          }
-        }
-      } else {
-        // Step 2: verify OTP and log in
-        const res = await fetch("/api/auth/verify-login-otp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include", // send HttpOnly cookie
-          body: JSON.stringify({ email: formData.email, otp: formData.otp }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          // Expecting { user: {...}, accessToken: '...' }
-          login(data.user, data.accessToken);
-          navigate("/dashboard");
+            } catch (err) {
+
+                if (err.inner) {
+                    const errs = {};
+                    err.inner.forEach((e) => (errs[e.path] = e.message));
+                    setFieldErrors(errs);
+                    return;
+                }
+            }
+            await submitCredentials({ email: formData.email, password: formData.password });
+
         } else {
-          const errorData = await res.json();
-          setErrors({ otp: errorData.message || "Invalid OTP" });
+
+            const { otpSchema } = await import("./validation/schemas");
+
+            try {
+                await otpSchema.validate(
+                    { otp_code: formData.otp_code },
+                    { abortEarly: false }
+                );
+
+            } catch (err) {
+
+                if (err.inner) {
+                    const errs = {};
+                    err.inner.forEach((e) => (errs[e.path] = e.message));
+                    setFieldErrors(errs);
+                    return;
+                }
+            }
+
+            await submitOtp({ otp_code: formData.otp_code });
         }
-      }
-    } catch (err) {
-      // Handle validation errors from Yup
-      if (err.inner) {
-        const formErrors = {};
-        err.inner.forEach((e) => {
-          formErrors[e.path] = e.message;
-        });
-        setErrors(formErrors);
-      }
-    }
-  };
+    };
 
-  return (
-    <div>
-      <Navbar title="Register" url="/register" />
+    // otpSent drives the same conditional rendering your JSX already uses
+    const otpSent = step === STEP.OTP;
 
-      <div
-        className="relative min-h-screen w-full flex flex-col bg-cover bg-center"
-        style={{
-          backgroundImage: `url('/assets/login_bg_full.png')`, // Background image for the login page
-        }}
-      >
-        {/* Black transparent overlay */}
-        <div className="absolute inset-0 bg-black/50 md:bg-black/70 lg:bg-black/80"></div>
+    return (
+        <div>
+            <Navbar title="Register" url="/register" />
 
-        <div className="flex flex-1 items-center justify-center relative z-10">
-          {/* Main container with two sections */}
-          <div className="flex max-w-5xl mx-auto">
-            {/* Left-side Image Panel */}
-            <div className="hidden md:flex w-1/2 items-center justify-center relative">
-              <img
-                src="/assets/login_bg_left.png"
-                alt="Left panel image"
-                className="w-full h-full object-cover rounded-l-xl"
-              />
+            <div
+                className="relative min-h-screen w-full flex flex-col bg-cover bg-center"
+                style={{
+                    backgroundImage: `url('/assets/login_bg_full.png')`,
+                }}
+            >
+                <div className="absolute inset-0 bg-black/50 md:bg-black/70 lg:bg-black/80"></div>
 
-              {/* Black transparent overlay */}
-              <div className="absolute inset-0 bg-black/25 z-20"></div>
+                <div className="flex flex-1 items-center justify-center relative z-10">
+                    <div className="flex max-w-5xl mx-auto">
 
-              {/* Overlay text (optional) */}
-              <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center">
-                <div className="space-y-4 max-w-lg">
-                  <div className="text-5xl font-semibold text-white drop-shadow-lg">
-                    Welcome Back!
-                  </div>
+                        {/* Left-side Image Panel — unchanged */}
+                        <div className="hidden md:flex w-1/2 items-center justify-center relative">
+                            <img
+                                src="/assets/login_bg_left.png"
+                                alt="Left panel image"
+                                className="w-full h-full object-cover rounded-l-xl"
+                            />
+                            <div className="absolute inset-0 bg-black/25 z-20"></div>
+                            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center">
+                                <div className="space-y-4 max-w-lg">
+                                    <div className="text-5xl font-semibold text-white drop-shadow-lg">
+                                        Welcome Back!
+                                    </div>
+                                    <p className="text-white text-xl px-6 pt-4 rounded-lg leading-relaxed">
+                                        Please enter your credentials to access your dashboard
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
-                  <p className="text-white text-xl px-6 pt-4 rounded-lg leading-relaxed">
-                    Please enter your credentials to access your dashboard
-                  </p>
+                        {/* Right-side Login Box — unchanged except error wiring */}
+                        <div className="w-full md:w-90 bg-black p-8 md:rounded-r-xl text-white">
+                            <div className="text-2xl mb-4 text-center w-full text-white font-bold">
+                                {otpSent ? "Verify OTP" : "Login"}
+                            </div>
 
-                  {/* <p className="text-white text-xl px-6 pb-6 rounded-lg leading-relaxed">
-                                        Don't have an account? <br /> Click on Register and get started!
-                                    </p> */}
+                            {/* API error banner — replaces your errors.form <p> */}
+                            {error && (
+                                <div className="text-red-500 mb-2">
+                                    <p>{error.message}</p>
+                                    {error.traceId && (
+                                        <p className="text-xs text-red-400 mt-1">
+                                            Ref: {error.traceId}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+
+                            <form onSubmit={handleSubmit}>
+                                <InputField
+                                    label="Email"
+                                    type="email"
+                                    name="email"
+                                    autoComplete="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    error={fieldErrors.email}
+                                    disabled={isLoading || otpSent}
+                                />
+
+                                <InputField
+                                    label="Password"
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    autoComplete="current-password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    error={fieldErrors.password}
+                                    disabled={isLoading || otpSent}
+                                    rightElement={
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            className="text-gray-400 hover:text-white focus:outline-none"
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                            tabIndex={-1}
+                                        >
+                                            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                        </button>
+                                    }
+                                />
+
+
+                                {/* Show OTP field only after credentials are submitted successfully and OTP is sent */}
+                                {otpSent && (
+                                    <InputField
+                                        label="OTP"
+                                        type="text"
+                                        name="otp_code"
+                                        autoComplete="one-time-code"
+                                        inputMode="numeric"
+                                        maxLength={6}
+                                        value={formData.otp_code}
+                                        onChange={handleChange}
+                                        error={fieldErrors.otp_code}
+                                        disabled={isLoading}
+                                    />
+                                )}
+
+                                <div className="flex justify-center">
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading || (otpSent && formData.otp_code.length !== 6)}
+                                        className="w-2/3 bg-emerald-700 text-white py-2 px-4 rounded mt-4 font-bold disabled:opacity-50"
+                                    >
+                                        {isLoading
+                                            ? otpSent ? "Verifying…" : "Sending OTP…"
+                                            : otpSent ? "Verify OTP & Login" : "Send OTP"}
+                                    </button>
+                                </div>
+
+                                {otpSent && (
+                                    <div className="flex justify-center mt-3">
+                                        <button
+                                            type="button"
+                                            onClick={goBackToCredentials}
+                                            disabled={isLoading}
+                                            className="text-sm text-gray-400 hover:text-white underline"
+                                        >
+                                            Back to login
+                                        </button>
+                                    </div>
+                                )}
+
+
+                            </form>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
 
-            {/* Right-side Login Box */}
-            <div className="w-full md:w-90 bg-black p-8 md:rounded-r-xl text-white">
-              <div className="text-2xl mb-4 text-center w-full text-white font-bold">
-                Login
-              </div>
-
-              {errors.form && (
-                <p className="text-red-500 mb-2">{errors.form}</p>
-              )}
-
-              <form onSubmit={handleSubmit}>
-                <InputField
-                  label="Email"
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  error={errors.email}
-                  disabled={isSubmitting}
-                />
-
-                <InputField
-                  label="Password"
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  autoComplete="current-password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  error={errors.password}
-                  disabled={isSubmitting}
-                  rightElement={
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      className="text-gray-400 hover:text-white focus:outline-none"
-                      aria-label={
-                        showPassword ? "Hide password" : "Show password"
-                      }
-                      tabIndex={-1}
-                    >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
-                  }
-                />
-
-                {otpSent && (
-                  <InputField
-                    label="OTP"
-                    type="text"
-                    name="otp"
-                    autoComplete="one-time-code"
-                    inputMode="numeric"
-                    value={formData.otp}
-                    onChange={handleChange}
-                    error={errors.otp}
-                    disabled={isSubmitting}
-                  />
-                )}
-
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    className="w-2/3 bg-emerald-700 text-white py-2 px-4 rounded mt-4 font-bold"
-                  >
-                    {otpSent ? "Verify OTP & Login" : "Send OTP"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+            <Footer />
         </div>
-      </div>
-
-      <Footer />
-    </div>
-  );
+    );
 };
 
 export default Login;

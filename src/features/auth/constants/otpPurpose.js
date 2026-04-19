@@ -1,6 +1,6 @@
 
 export const OTP_PURPOSE = Object.freeze({
-    LOGIN: 1,
-    REGISTER: 2,
+    REGISTER: 1,
+    LOGIN: 2,
     RESET_PASSWORD: 3,
 });

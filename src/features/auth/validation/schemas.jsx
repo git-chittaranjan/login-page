@@ -24,21 +24,21 @@ export const loginSchema = Yup.object({
 
 // Validation for OTP form
 export const otpSchema = Yup.object({
-    email: Yup.string()
-        .email('Invalid email address')
-        .lowercase() //Both .lowercase() and .trim() are transformations in Yup, not validations. Your API call receives the cleaned value
-        .trim()
-        .required('Email is required'),
+    // email: Yup.string()
+    //     .email('Invalid email address')
+    //     .lowercase() //Both .lowercase() and .trim() are transformations in Yup, not validations. Your API call receives the cleaned value
+    //     .trim()
+    //     .required('Email is required'),
 
     otp_code: Yup.string()
         .required("OTP is required.")
         .matches(/^\d{6}$/, "OTP must be a 6-digit number."),
 
-    otp_purpose: Yup.number()
-        .typeError("OTP purpose must be a number.")
-        .integer("OTP purpose must be an integer.")
-        .oneOf(Object.values(OTP_PURPOSE), "Invalid OTP purpose.")
-        .required("OTP purpose is required."),
+    // otp_purpose: Yup.number()
+    //     .typeError("OTP purpose must be a number.")
+    //     .integer("OTP purpose must be an integer.")
+    //     .oneOf(Object.values(OTP_PURPOSE), "Invalid OTP purpose.")
+    //     .required("OTP purpose is required."),
 });
 
 

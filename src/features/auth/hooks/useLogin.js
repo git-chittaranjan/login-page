@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginWithCredentials, verifyLoginOtp } from "../services/authService";
 import { useAuth } from "../../../contexts/AuthContext";
 import APP_ROUTES from "../../../constants/appRoutes";
-import ERROR_MESSAGES from "../../../constants/errorMessages";
+import { ERROR_MESSAGES } from "../../../constants/errorMessages";
 
 const STEP = Object.freeze({
     CREDENTIALS: "CREDENTIALS",
@@ -65,7 +65,7 @@ export function useLogin() {
             const response = await verifyLoginOtp(email, values.otp_code);
 
             login(response.data);
-            navigate(APP_ROUTES.DASHBOARD, { replace: true });
+            navigate(APP_ROUTES.PRIVATE.DASHBOARD, { replace: true });
 
         } catch (err) {
             setError({

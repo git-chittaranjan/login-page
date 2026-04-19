@@ -18,6 +18,7 @@ const APP_ROUTES = Object.freeze({
         DASHBOARD: "/dashboard",
         PROFILE: "/profile",
         PROFILE_UPDATE: "/profile/update",
+        CONTACT: "/contact",
     },
 
     // System routes
