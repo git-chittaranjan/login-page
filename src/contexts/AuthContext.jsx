@@ -1,55 +1,92 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-// Create AuthContext
-const AuthContext = createContext();
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { setAccessToken, clearAccessToken, isTokenExpired } from "../utils/tokenUtils";
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);               // Logged-in user info
-    const [accessToken, setAccessToken] = useState(null); // JWT access token
+const AuthContext = createContext(null);
 
-    // Call this after successful login or OTP verification
-    const login = (newUser, token) => {
-        setUser(newUser);
-        setAccessToken(token);
-    };
+// children is whatever JSX you put between the opening and closing <AuthProvider> tags
+export function AuthProvider({ children }) {
 
-    // Logout: clear auth state and tell backend to clear refresh token
-    const logout = async () => {
-        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-        setUser(null);
-        setAccessToken(null);
-    };
+    const [user, setUser] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Refresh the access token by calling backend. Backend should read refresh cookie.
-    const refreshToken = useCallback(async () => {
-        try {
-            const res = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' });
-            if (res.ok) {
-                const data = await res.json();
-                setAccessToken(data.accessToken);
-            } else {
-                // Refresh failed (e.g. cookie expired) – force logout
-                logout();
-            }
-        } catch {
-            logout();
-        }
+
+
+    const login = useCallback((authData) => {
+        const { access_token, expires_at, user_id, email, name } = authData;
+        setAccessToken(access_token, expires_at);
+        setUser({ user_id, email, name });
+        setIsAuthenticated(true);
     }, []);
 
-    // Auto-refresh: schedule a refresh shortly before token expiry
-    useEffect(() => {
-        if (!accessToken) return;
-        const payload = JSON.parse(atob(accessToken.split('.')[1] || ''));
-        const expiresAt = payload.exp * 1000; // JWT exp is in seconds
-        const timeout = expiresAt - Date.now() - 60 * 1000; // refresh 1 min before expiry
-        if (timeout > 0) {
-            const timer = setTimeout(refreshToken, timeout);
-            return () => clearTimeout(timer);
+    const logout = useCallback(() => {
+        clearAccessToken();
+        setUser(null);
+        setIsAuthenticated(false);
+    }, []);
+
+    const checkAuth = useCallback(() => {
+        if (isTokenExpired()) {
+            logout();
+            return false;
         }
-    }, [accessToken, refreshToken]);
+        return true;
+    }, [logout]);
 
-    const value = { user, accessToken, login, logout, refreshToken };
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
 
-export const useAuth = () => useContext(AuthContext);
+
+    // When a backgrounded tab regains focus, silently check the token. This code listens for a custom event called token:expired 
+    // on the browser window, and when that event fires, it logs the user out if they are currently logged in.
+    useEffect(() => {
+        const handleTokenExpired = () => {
+            if (isAuthenticated) {
+                logout();
+            }
+        };
+
+        window.addEventListener("token:expired", handleTokenExpired);
+
+        // This is the cleanup function. When the component unmounts or before the effect re-runs, it removes the event listener
+        return () => window.removeEventListener("token:expired", handleTokenExpired);
+    }, [isAuthenticated, logout]);
+
+
+
+    // This code syncs logout across multiple browser tabs. If the user logs out in one tab, all other open tabs automatically log out too.
+    useEffect(() => {
+        let channel;
+        try {
+            channel = new BroadcastChannel("auth_session");
+            channel.addEventListener("message", (e) => {
+                if (e.data?.type === "LOGOUT") {
+                    setUser(null);
+                    setIsAuthenticated(false);
+                }
+            });
+        } catch {
+            // BroadcastChannel not supported by browser — degrade gracefully
+        }
+        return () => channel?.close();
+    }, []);
+
+
+
+    return (
+        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, checkAuth }}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+
+
+// ── Consumer hook for clean consumption
+export function useAuth() {
+
+    const context = useContext(AuthContext);
+
+    if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider");
+    }
+    return context;
+}

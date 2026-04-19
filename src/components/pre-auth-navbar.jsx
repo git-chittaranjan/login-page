@@ -22,6 +22,7 @@ const Navbar = ({ title, url }) => {
                         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                     </button>
 
+                    {/* the <a> will causes full page reload, wher <Link> will not */}
                     <a href="/" className="sm:text-xl md:text-2xl font-bold text-white">
                         Chittaranjan Saha
                     </a>

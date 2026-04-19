@@ -41,23 +41,6 @@ function buildHeaders(requiresAuth = false) {
 
 
 
-async function parseResponse(response) {
-
-    const contentType = response.headers.get("Content-Type") ?? "";
-
-    if (!contentType.includes("application/json")) {
-        throw {
-            success: false,
-            status_code: "INVALID_RESPONSE",
-            description: "Server returned a non-JSON response.",
-        };
-    }
-
-    return response.json();
-}
-
-
-
 async function request(endpoint, options = {}) {
 
     // Destructures the options parameter (if not passed, default will be {} empty object and default values will be assigned e.g. method = "GET", body = null, etc.)
@@ -131,6 +114,23 @@ async function request(endpoint, options = {}) {
 
         throw error;
     }
+}
+
+
+
+async function parseResponse(response) {
+
+    const contentType = response.headers.get("Content-Type") ?? "";
+
+    if (!contentType.includes("application/json")) {
+        throw {
+            success: false,
+            status_code: "INVALID_RESPONSE",
+            description: "Server returned a non-JSON response.",
+        };
+    }
+
+    return response.json();
 }
 
 
