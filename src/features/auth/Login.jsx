@@ -42,7 +42,7 @@ const Login = () => {
     };
 
     const handleSubmit = async (e) => {
-        
+
         e.preventDefault();
         setShowPassword(false);
         setFieldErrors({});
@@ -210,7 +210,7 @@ const Login = () => {
                                         className="w-2/3 bg-emerald-700 text-white py-2 px-4 rounded mt-4 font-bold disabled:opacity-50"
                                     >
                                         {isLoading
-                                            ? otpSent ? "Verifying…" : "Sending OTP…"
+                                            ? otpSent ? "Verifying OTP" : "Sending OTP"
                                             : otpSent ? "Verify OTP & Login" : "Send OTP"}
                                     </button>
                                 </div>

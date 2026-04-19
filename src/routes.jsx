@@ -11,6 +11,10 @@ import Contact from './features/contact-email/contact';
 export default function AppRoutes() {
     return (
         <Routes>
+
+            {/* Base URL → Login */}
+            <Route path="/" element={<Navigate to={APP_ROUTES.PUBLIC.LOGIN} replace />} />
+
             {/* Public routes */}
             <Route path={APP_ROUTES.PUBLIC.LOGIN} element={<Login />} />
             <Route path={APP_ROUTES.PUBLIC.REGISTER} element={<Register />} />
@@ -19,7 +23,7 @@ export default function AppRoutes() {
             {/* <Route path={APP_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} /> */}
 
             {/* Fallback */}
-            <Route path="*" element={<Navigate to={APP_ROUTES.LOGIN} replace />} />
+            <Route path="*" element={<Navigate to={APP_ROUTES.PUBLIC.LOGIN} replace />} />
 
             {/* Protected routes */}
             {/* <Route element={<ProtectedRoute />}>
