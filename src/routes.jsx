@@ -20,7 +20,7 @@ export default function AppRoutes() {
             <Route path={APP_ROUTES.PUBLIC.REGISTER} element={<Register />} />
             <Route path={APP_ROUTES.PRIVATE.DASHBOARD} element={<Dashboard name="Chittaranjan Saha" />} />
             <Route path={APP_ROUTES.PRIVATE.CONTACT} element={<Contact />} />
-            {/* <Route path={APP_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} /> */}
+            
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to={APP_ROUTES.PUBLIC.LOGIN} replace />} />
@@ -29,6 +29,7 @@ export default function AppRoutes() {
             {/* <Route element={<ProtectedRoute />}>
                 <Route path={APP_ROUTES.DASHBOARD} element={<Dashboard />} />
             </Route> */}
+
         </Routes>
     );
 }
