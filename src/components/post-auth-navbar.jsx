@@ -31,7 +31,7 @@ const Navbar = () => {
 
     return (
         <header className="w-full bg-black border-b-2 border-gray-700 fixed top-0 left-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
 
                 {/* Mobile Toggle and Name */}
                 <div className="flex items-center gap-x-2">

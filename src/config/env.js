@@ -10,6 +10,7 @@ const _ENV = Object.freeze({
     REQUEST_TIMEOUT_MS: Number(import.meta.env.VITE_REQUEST_TIMEOUT_MS),
     ACCESS_TOKEN_EXPIRY_MS: Number(import.meta.env.VITE_ACCESS_TOKEN_EXPIRY_MINUTES) * 60 * 1000,
     DEFAULT_PAGE_SIZE: Number(import.meta.env.VITE_DEFAULT_PAGE_SIZE),
+    OTP_RESEND_COOLDOWN_SECONDS: Number(import.meta.env.VITE_OTP_RESEND_COOLDOWN_SECONDS),
 });
 
 
@@ -35,6 +36,7 @@ const NUMERIC_KEYS = [
     "REQUEST_TIMEOUT_MS",
     "ACCESS_TOKEN_EXPIRY_MS",
     "DEFAULT_PAGE_SIZE",
+    "OTP_RESEND_COOLDOWN_SECONDS",
 ];
 
 NUMERIC_KEYS.forEach((key) => {

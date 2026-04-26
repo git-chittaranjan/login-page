@@ -46,7 +46,7 @@ const AvatarButton = () => {
                         alt="Profile Photo"
                         className="w-10 h-10 rounded-full object-cover"
                     />
-                    <span className="absolute bottom-0 right-0 block w-2.5 h-2.5 bg-green-800 rounded-full border-2 border-white animate-ping duration-500"></span>
+                    <span className="absolute bottom-0 right-0 block w-2.5 h-2.5 bg-green-800 rounded-full border-2 border-white"></span>
                 </span>
             </button>
 
