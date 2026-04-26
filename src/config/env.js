@@ -16,7 +16,7 @@ const _ENV = Object.freeze({
 
 
 // REQUIRED KEYS (Fail Fast Strategy)
-const REQUIRED_KEYS = ["API_BASE_URL", "API_KEY"];
+const REQUIRED_KEYS = ["API_BASE_URL", "API_KEY", "OTP_RESEND_COOLDOWN_SECONDS", "OTP_LENGTH"];
 
 REQUIRED_KEYS.forEach((key) => {
     if (!_ENV[key]) {

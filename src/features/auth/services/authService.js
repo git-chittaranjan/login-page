@@ -27,3 +27,24 @@ export async function verifyLoginOtp(email, otp_code) {
         otp_purpose: OTP_PURPOSE.LOGIN,
     });
 }
+
+
+
+export async function registerDetails(name, gender, email, password, confirm_password) {
+    return httpClient.post(API_ENDPOINTS.AUTH.REGISTER, {
+        name,
+        gender,
+        email,
+        password,
+        confirm_password
+    });
+}
+
+export async function verifyRegisterOtp(email, otp_code) {
+    return httpClient.post(API_ENDPOINTS.AUTH.VERIFY_OTP, {
+        email,
+        otp_code,
+        otp_purpose: OTP_PURPOSE.REGISTER,
+    });
+}
+

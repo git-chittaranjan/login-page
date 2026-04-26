@@ -6,6 +6,7 @@ const APP_ROUTES = Object.freeze({
 
     // Public routes
     PUBLIC: {
+        HOME: "/",
         LOGIN: "/login",
         REGISTER: "/register",
         FORGOT_PASSWORD: "/forgot-password",

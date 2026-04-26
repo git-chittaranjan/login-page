@@ -1,23 +1,25 @@
 
 import * as Yup from 'yup';
 import { OTP_PURPOSE } from "../constants/otpPurpose";
+import { CONFIG } from "../../../config/env";
+import { ERROR_MESSAGES } from "../../../constants/errorMessages";
 
 
 
 // Validation for login form (email, password)
 export const loginSchema = Yup.object({
     email: Yup.string()
-        .email('Invalid email address')
+        .email(ERROR_MESSAGES.VALIDATION.INVALID_EMAIL)
         .lowercase() //Both .lowercase() and .trim() are transformations in Yup, not validations. Your API call receives the cleaned value
         .trim()
-        .required('Email is required'),
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED),
 
     password: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/[0-9]/, 'Password must contain at least one number')
-        .matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
-        .required('Password is required')
+        .min(8, ERROR_MESSAGES.VALIDATION.PASSWORD_MIN)
+        .matches(/[A-Z]/, ERROR_MESSAGES.VALIDATION.PASSWORD_UPPERCASE)
+        .matches(/[0-9]/, ERROR_MESSAGES.VALIDATION.PASSWORD_NUMBER)
+        .matches(/[^A-Za-z0-9]/, ERROR_MESSAGES.VALIDATION.PASSWORD_SPECIAL)
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED)
 });
 
 
@@ -25,14 +27,14 @@ export const loginSchema = Yup.object({
 // Validation for OTP form
 export const otpSchema = Yup.object({
     // email: Yup.string()
-    //     .email('Invalid email address')
+    //     .email(ERROR_MESSAGES.VALIDATION.INVALID_EMAIL)
     //     .lowercase() //Both .lowercase() and .trim() are transformations in Yup, not validations. Your API call receives the cleaned value
     //     .trim()
-    //     .required('Email is required'),
+    //     .required(ERROR_MESSAGES.VALIDATION.REQUIRED_FIELD),
 
     otp_code: Yup.string()
-        .required("OTP is required.")
-        .matches(/^\d{6}$/, "OTP must be a 6-digit number."),
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED)
+        .length(CONFIG.OTP_LENGTH, ERROR_MESSAGES.VALIDATION.OTP_LENGTH),
 
     // otp_purpose: Yup.number()
     //     .typeError("OTP purpose must be a number.")
@@ -47,31 +49,28 @@ export const otpSchema = Yup.object({
 export const registerSchema = Yup.object({
     name: Yup.string()
         .trim()
-        .min(4, 'Name must be at least 4 characters')
-        .max(50, 'Name must not exceed 50 characters')
-        .required('Name is required'),
+        .min(4, ERROR_MESSAGES.VALIDATION.NAME_MIN)
+        .max(50, ERROR_MESSAGES.VALIDATION.NAME_MAX)
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED),
 
-    gender: Yup.string()
-        .oneOf(['male', 'female', 'other'], 'Invalid gender')
-        .required('Gender is required'),
+    gender: Yup.number()
+        .oneOf([1, 2, 3], ERROR_MESSAGES.VALIDATION.INVALID_GENDER)
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED),
 
     email: Yup.string()
-        .email('Invalid email address')
+        .email(ERROR_MESSAGES.VALIDATION.INVALID_EMAIL)
         .lowercase()
         .trim()
-        .required('Email is required'),
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED),
 
     password: Yup.string()
-        .min(8, 'Password must be at least 8 characters')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/[0-9]/, 'Password must contain at least one number')
-        .matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
-        .required('Password is required'),
+        .min(8, ERROR_MESSAGES.VALIDATION.PASSWORD_MIN)
+        .matches(/[A-Z]/, ERROR_MESSAGES.VALIDATION.PASSWORD_UPPERCASE)
+        .matches(/[0-9]/, ERROR_MESSAGES.VALIDATION.PASSWORD_NUMBER)
+        .matches(/[^A-Za-z0-9]/, ERROR_MESSAGES.VALIDATION.PASSWORD_SPECIAL)
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED),
 
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password')], 'Passwords must match')
-        .required('Confirm your password'),
-
-    otp: Yup.string()
-        .matches(/^\d{6}$/, 'OTP must be exactly 6 digits'),
+    confirm_password: Yup.string()
+        .oneOf([Yup.ref('password')], ERROR_MESSAGES.VALIDATION.PASSWORD_MISMATCH)
+        .required(ERROR_MESSAGES.VALIDATION.REQUIRED),
 });

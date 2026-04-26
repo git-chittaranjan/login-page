@@ -18,6 +18,7 @@ const STEP = Object.freeze({
  * Does NOT return JSX (not a component)
 */
 export function useLogin() {
+    
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -30,12 +31,19 @@ export function useLogin() {
 
     const clearError = useCallback(() => setError(null), []);
 
+    const setApiError = (err) => {
+        setError({
+            message: err?.message || ERROR_MESSAGES.SYSTEM.UNKNOWN,
+            traceId: err?.traceId || null,
+        });
+    };
+
 
 
     const submitCredentials = useCallback(async (values) => {
 
         setIsLoading(true);
-        setError(null);
+        clearError();
 
         try {
             await loginWithCredentials(values.email, values.password);
@@ -44,22 +52,19 @@ export function useLogin() {
             setStep(STEP.OTP);
 
         } catch (err) {
-            setError({
-                message: err?.description ?? ERROR_MESSAGES.INVALID_CREDENTIALS,
-                traceId: err?.trace_id ?? null,
-            });
+            setApiError(err);
 
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [clearError]);
 
 
 
     const submitOtp = useCallback(async (values) => {
 
         setIsLoading(true);
-        setError(null);
+        clearError();
 
         try {
             const response = await verifyLoginOtp(email, values.otp_code);
@@ -68,24 +73,21 @@ export function useLogin() {
             navigate(APP_ROUTES.PRIVATE.DASHBOARD, { replace: true });
 
         } catch (err) {
-            setError({
-                message: err?.description ?? ERROR_MESSAGES.INVALID_OTP,
-                traceId: err?.trace_id ?? null,
-            });
+            setApiError(err);
 
         } finally {
             setIsLoading(false);
         }
     },
-        [email, login, navigate]
+        [clearError, email, login, navigate]
     );
 
 
 
     const goBackToCredentials = useCallback(() => {
         setStep(STEP.CREDENTIALS);
-        setError(null);
-    }, []);
+        clearError();
+    }, [clearError]);
 
 
 

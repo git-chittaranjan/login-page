@@ -1,88 +1,252 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import InputField from '../../components/InputField';
-import { registerSchema } from './validation/schemas';
-import Navbar from '../../components/pre-auth-navbar';
-import Footer from '../../components/footer';
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import InputField from "../../components/InputField";
+import Navbar from "../../components/pre-auth-navbar";
+import Footer from "../../components/footer";
+import { Eye, EyeOff } from "lucide-react";
+import { useRegister } from "./hooks/useRegister";
+import PasswordStrengthMeter from "./components/PasswordStrengthMeter";
+import { CONFIG } from "../../config/env";
+import { GENDER_OPTIONS } from "./constants/genderOptions";
+
+
+
+// Masks email: chittaranjan@gmail.com → ch*********@gmail.com
+const maskEmail = (email) => {
+    if (!email) return "";
+    const [local, domain] = email.split("@");
+    if (!domain) return email;
+    const visible = local.slice(0, 2);
+    const masked = "*".repeat(local.length - 2);
+    return `${visible}${masked}@${domain}`;
+};
+
+const RESEND_COOLDOWN_SECONDS = CONFIG.OTP_RESEND_COOLDOWN_SECONDS;
+
+
+
+const INITIAL_FORM = {
+    name: "",
+    gender: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+    otp_code: "",
+};
+
+
 
 const Register = () => {
-    const { login } = useAuth();
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        firstName: '', lastName: '', dob: '', gender: '', address: '',
-        country: '', email: '', password: '', confirmPassword: '', otp: ''
-    });
-    const [errors, setErrors] = useState({});
-    const [otpSent, setOtpSent] = useState(false);
 
-    const handleChange = e => {
-        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    // ==================== Call useRegister Hook ====================
+    const {
+        step,
+        STEP,
+        email,
+        isLoading,
+        isResending,
+        error,
+        clearError,
+        submitRegister,
+        resendOtp,
+        submitOtp,
+        goBackToRegisterForm
+    } = useRegister();
+
+
+
+    const [formData, setFormData] = useState(INITIAL_FORM);
+    const [fieldErrors, setFieldErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [resendCooldown, setResendCooldown] = useState(0);
+    const cooldownRef = useRef(null);
+
+
+
+    // Start cooldown timer the moment OTP step is entered
+    useEffect(() => {
+        if (step === STEP.OTP) {
+            startCooldown();
+        }
+
+        return () => clearInterval(cooldownRef.current);
+    }, [step]);
+
+
+
+    // Counts down every second. Clears itself at zero
+    const startCooldown = () => {
+
+        clearInterval(cooldownRef.current);
+        setResendCooldown(RESEND_COOLDOWN_SECONDS);
+
+        cooldownRef.current = setInterval(() => {
+            setResendCooldown((prev) => {
+                if (prev <= 1) {
+                    clearInterval(cooldownRef.current);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
     };
 
-    const handleSubmit = async e => {
+
+
+    // Converts seconds → "MM:SS"
+    const formatCountdown = (seconds) => {
+        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const s = (seconds % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+    };
+
+
+
+    // ==================== Handlers ====================
+
+    const handleChange = (e) => {
+
+        const { name, value } = e.target;
+
+        clearError();
+        setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
+
+        if (name === "password") setShowPassword(false);
+        if (name === "confirm_password") setShowConfirmPassword(false);
+
+        // Strip non-digits from OTP field
+        const sanitized = name === "otp_code" ? value.replace(/\D/g, "") : value;
+
+        setFormData((prev) => ({ ...prev, [name]: sanitized }));
+    };
+
+
+
+    const handleGenderSelect = (value) => {
+        clearError();
+        setFieldErrors((prev) => ({ ...prev, gender: undefined }));
+        setFormData((prev) => ({ ...prev, gender: value }));
+    };
+
+
+
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
-        setErrors({});
-        try {
-            await registerSchema.validate(formData, { abortEarly: false });
-            if (!otpSent) {
-                // Step 1: submit registration details to get OTP
-                const { firstName, lastName, dob, gender, address, country, email, password } = formData;
-                const res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ firstName, lastName, dob, gender, address, country, email, password })
-                });
-                if (res.ok) {
-                    setOtpSent(true);
-                } else {
-                    const errorData = await res.json();
-                    setErrors({ form: errorData.message || 'Registration failed' });
-                }
-            } else {
-                // Step 2: verify OTP and finalize registration
-                const res = await fetch('/api/auth/verify-register-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ email: formData.email, otp: formData.otp })
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    // Expecting { user: {...}, accessToken: '...' }
-                    login(data.user, data.accessToken);
-                    navigate('/dashboard');
-                } else {
-                    const errorData = await res.json();
-                    setErrors({ otp: errorData.message || 'Invalid OTP' });
+        setShowPassword(false);
+        setShowConfirmPassword(false);
+        setFieldErrors({});
+
+        if (step === STEP.FORM) {
+
+            const { registerSchema } = await import("./validation/schemas");
+
+            try {
+                await registerSchema.validate(
+                    {
+                        name: formData.name,
+                        gender: formData.gender === "" ? undefined : Number(formData.gender),
+                        email: formData.email,
+                        password: formData.password,
+                        confirm_password: formData.confirm_password,
+                    },
+                    { abortEarly: false }
+                );
+
+            } catch (err) {
+
+                clearError();
+
+                if (err.inner) {
+                    const errs = {};
+                    err.inner.forEach((e) => (errs[e.path] = e.message));
+                    setFieldErrors(errs);
+                    return;
                 }
             }
-        } catch (err) {
-            if (err.inner) {
-                const formErrors = {};
-                err.inner.forEach(e => { formErrors[e.path] = e.message; });
-                setErrors(formErrors);
+
+            await submitRegister({
+                name: formData.name.trim(),
+                gender: Number(formData.gender),
+                email: formData.email.trim(),
+                password: formData.password,
+                confirm_password: formData.confirm_password
+            });
+
+        } else {
+
+            const { otpSchema } = await import("./validation/schemas");
+
+            try {
+                await otpSchema.validate(
+                    { otp_code: formData.otp_code },
+                    { abortEarly: false }
+                );
+
+            } catch (err) {
+
+                clearError();
+
+                if (err.inner) {
+                    const errs = {};
+                    err.inner.forEach((e) => (errs[e.path] = e.message));
+                    setFieldErrors(errs);
+                    return;
+                }
             }
+
+            await submitOtp({ otp_code: formData.otp_code });
         }
     };
 
+
+
+    const handleResendOtp = async () => {
+
+        if (resendCooldown > 0 || isLoading) return;
+        clearError();
+
+        await resendOtp({
+            name: formData.name.trim(),
+            gender: Number(formData.gender),
+            email: formData.email.trim(),
+            password: formData.password,
+            confirm_password: formData.confirm_password
+        });
+
+        startCooldown();
+    };
+
+
+
+    const handleGoBack = () => {
+        clearError();
+        clearInterval(cooldownRef.current);
+        setResendCooldown(0);
+        setFormData((prev) => ({ ...prev, otp_code: "" }));
+        setFieldErrors({});
+        goBackToRegisterForm();
+    };
+
+
+    const otpSent = step === STEP.OTP;
+
+
+
+    // ==================== Render ====================
     return (
         <div>
             <Navbar title="Login" url="/login" />
 
             <div
-                className="relative min-h-screen w-full flex flex-col bg-cover bg-center"
-                style={{
-                    backgroundImage: `url('/assets/register_bg_full.png')` // Background image for the login page
-                }}
+                className="relative min-h-screen w-full flex flex-col bg-cover bg-center pt-20"
+                style={{ backgroundImage: `url('/assets/register_bg_full.png')` }}
             >
-                {/* Black transparent overlay */}
-                <div className="absolute inset-0 bg-black/50 md:bg-black/70 lg:bg-black/85"></div>
+                <div className="absolute inset-0 bg-black/40 md:bg-black/70 lg:bg-black/80"></div>
 
-                <div className="flex flex-1 items-center justify-center relative z-10">
-
-                    {/* Main container with two sections */}
-                    <div className="flex max-w-5xl mx-auto pt-12">
+                <div className="flex flex-1 items-center justify-center relative z-10 py-8">
+                    <div className="flex max-w-5xl mx-auto w-full">
 
                         {/* Left-side Image Panel */}
                         <div className="hidden md:flex w-1/2 items-center justify-center relative">
@@ -91,65 +255,261 @@ const Register = () => {
                                 alt="Left panel image"
                                 className="w-full h-full object-cover rounded-l-xl"
                             />
-
-                            {/* Black transparent overlay */}
-                            <div className="absolute inset-0 bg-black/30 z-20"></div>
-
-                            {/* Overlay text (optional) */}
+                            <div className="absolute inset-0 bg-black/50 z-20"></div>
                             <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center">
                                 <div className="space-y-4 max-w-lg">
                                     <div className="text-5xl font-semibold text-white drop-shadow-lg">
-                                        Sign up now!
+                                        Welcome Back!
                                     </div>
-
-                                    <p className="text-white text-xl px-6 py-4 rounded-lg leading-relaxed">
+                                    <p className="text-white text-xl px-6 pt-4 rounded-lg leading-relaxed">
                                         Create your account now to unlock exciting projects, innovative ideas and stay connected with me
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Right-side Register Box */}
-                        <div className="w-full md:w-90 bg-black px-8 pb-8 pt-6 md:rounded-r-xl text-white">
+
+                        {/* Right-side Box */}
+                        <div className="w-full md:w-90 bg-black p-8 md:rounded-r-xl text-white">
 
                             <div className="text-2xl mb-4 text-center w-full text-white font-bold">
-                                Register
+                                {otpSent ? "Verify OTP" : "Register"}
                             </div>
 
-                            {errors.form && (
-                                <p className="text-red-500 mb-2">{errors.form}</p>
+                            {/* Subtitle */}
+                            <p className="text-sm text-gray-400 text-center mb-8">
+                                {otpSent ? (
+                                    <>
+                                        OTP sent to{" "}
+                                        <span className="text-white font-medium">
+                                            {maskEmail(email || formData.email)}
+                                        </span>
+                                    </>
+                                ) : (
+                                    "Enter your details to create your account"
+                                )}
+                            </p>
+
+
+                            {/* API error message */}
+                            {error && (
+                                <div className="text-red-500 mb-4">
+                                    <p>{error.message}</p>
+                                    {error.traceId && (
+                                        <p className="text-xs text-red-400 mt-1">
+                                            Ref: {error.traceId}
+                                        </p>
+                                    )}
+                                </div>
                             )}
 
-                            <form onSubmit={handleSubmit}>
-                                <InputField label="Name" name="name" value={formData.name} onChange={handleChange} error={errors.name} />
-                                <label className="block text-sm font-medium text-gray-100 mb-1">Gender</label>
-                                <select name="gender" value={formData.gender} onChange={handleChange} className="mb-4 px-3 py-2 border rounded w-full bg-black text-white"                            >
-                                    <option value="" className="bg-black text-white">Select gender</option>
-                                    <option value="male" className="bg-black text-white">Male</option>
-                                    <option value="female" className="bg-black text-white">Female</option>
-                                    <option value="other" className="bg-black text-white">Other</option>
-                                </select>
-                                {errors.gender && <p className="text-red-500 text-xs mb-2">{errors.gender}</p>}
-                                <InputField label="Email" type="email" name="email" value={formData.email} onChange={handleChange} error={errors.email} />
-                                <InputField label="Password" type="password" name="password" value={formData.password} onChange={handleChange} error={errors.password} />
-                                <InputField label="Confirm Password" type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} error={errors.confirmPassword} />
-                                {otpSent && (
-                                    <InputField label="OTP" type="text" name="otp" value={formData.otp} onChange={handleChange} error={errors.otp} />
+
+                            <form noValidate onSubmit={handleSubmit}>
+                                {!otpSent && (
+                                    <>
+                                        <InputField
+                                            label="Full Name"
+                                            type="text"
+                                            name="name"
+                                            autoComplete="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            error={fieldErrors.name}
+                                            disabled={isLoading}
+                                        />
+
+
+                                        <div className="mb-4">
+                                            <label className="block text-sm font-medium text-gray-100 mb-2">
+                                                Gender
+                                            </label>
+
+                                            <div className="flex gap-2 flex-wrap">
+                                                {GENDER_OPTIONS.map((opt) => {
+                                                    const isSelected =
+                                                        formData.gender !== "" &&
+                                                        Number(formData.gender) === opt.value;
+                                                    return (
+                                                        <button
+                                                            key={opt.value}
+                                                            type="button"
+                                                            disabled={isLoading}
+                                                            onClick={() => handleGenderSelect(opt.value)}
+                                                            className={`
+                                                                px-4 py-1 rounded-full text-sm font-medium border transition duration-200
+                                                                ${isSelected
+                                                                    ? "bg-emerald-900 border-emerald-700 text-white"
+                                                                    : "bg-transparent border-gray-700 text-gray-400 hover:border-gray-500 hover:text-white"
+                                                                }
+                                                                disabled:opacity-50 disabled:cursor-not-allowed
+                                                            `}
+                                                        >
+                                                            {opt.label}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+
+                                            {fieldErrors.gender && (
+                                                <p className="text-red-500 text-xs mt-1">
+                                                    {fieldErrors.gender}
+                                                </p>
+                                            )}
+                                        </div>
+
+
+                                        <InputField
+                                            label="Email"
+                                            type="email"
+                                            name="email"
+                                            autoComplete="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            error={fieldErrors.email}
+                                            disabled={isLoading}
+                                        />
+
+
+                                        <InputField
+                                            label="Password"
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            autoComplete="new-password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            error={fieldErrors.password}
+                                            disabled={isLoading}
+                                            rightElement={
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword((prev) => !prev)}
+                                                    className="text-gray-500 hover:text-white focus:outline-none"
+                                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                                    tabIndex={-1}
+                                                >
+                                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                </button>
+                                            }
+                                        />
+
+                                        {/* Password strength meter */}
+                                        <PasswordStrengthMeter password={formData.password} />
+
+
+                                        <InputField
+                                            label="Confirm Password"
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            name="confirm_password"
+                                            autoComplete="new-password"
+                                            value={formData.confirm_password}
+                                            onChange={handleChange}
+                                            error={fieldErrors.confirm_password}
+                                            disabled={isLoading}
+                                            rightElement={
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                                                    className="text-gray-500 hover:text-white focus:outline-none"
+                                                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                                    tabIndex={-1}
+                                                >
+                                                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                </button>
+                                            }
+                                        />
+                                    </>
                                 )}
+
+
+                                {otpSent && (
+                                    <InputField
+                                        label="OTP"
+                                        type="text"
+                                        name="otp_code"
+                                        autoComplete="one-time-code"
+                                        inputMode="numeric"
+                                        maxLength={6}
+                                        value={formData.otp_code}
+                                        onChange={handleChange}
+                                        error={fieldErrors.otp_code}
+                                        disabled={isLoading}
+                                    />
+                                )}
+
+
                                 <div className="flex justify-center">
                                     <button
                                         type="submit"
-                                        className="w-2/3 bg-orange-700 text-white py-2 px-4 rounded mt-4"
+                                        disabled={isLoading || (otpSent && formData.otp_code.length !== 6)}
+                                        className="w-2/3 bg-emerald-900 text-white py-2 px-4 rounded mt-4 font-bold transition duration-200 ease-in-out hover:bg-emerald-800 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-emerald-900 disabled:hover:scale-100"
                                     >
-                                        {otpSent ? 'Verify OTP & Register' : 'Send OTP'}
+                                        {isLoading
+                                            ? isResending ? "Resending OTP" : otpSent ? "Verifying" : "Sending OTP"
+                                            : otpSent ? "Register" : "Continue"
+                                        }
                                     </button>
                                 </div>
+
+
+                                {/* OTP step — Resend + Back */}
+                                {otpSent && (
+                                    <div className="flex flex-col items-center gap-4 mt-8">
+
+                                        {/* Resend OTP / Countdown */}
+                                        <div className="text-sm text-gray-400">
+                                            {resendCooldown > 0 ? (
+                                                <p className="flex items-center gap-1">
+                                                    <span>Resend OTP in</span>
+                                                    <span className="font-semibold text-white tracking-wide">
+                                                        {formatCountdown(resendCooldown)}
+                                                    </span>
+                                                </p>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleResendOtp}
+                                                    disabled={isLoading}
+                                                    className="px-4 py-1.5 font-sans rounded-md bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 hover:text-emerald-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                                >
+                                                    {isResending ? "Resending…" : "Resend OTP"}
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {/* Divider */}
+                                        <div className="w-16 h-px bg-gray-700"></div>
+
+                                        {/* Back to form */}
+                                        <button
+                                            type="button"
+                                            onClick={handleGoBack}
+                                            disabled={isLoading}
+                                            className="text-sm text-gray-400 hover:text-white transition underline underline-offset-4"
+                                        >
+                                            Back to Registration Form
+                                        </button>
+                                    </div>
+                                )}
+
+
+                                {/* Already have an account — form step only */}
+                                {!otpSent && (
+                                    <p className="text-sm text-gray-400 text-center mt-8">
+                                        Already have an account?{" "}
+                                        <Link
+                                            to="/login"
+                                            className="text-emerald-600 hover:text-emerald-300 underline font-medium"
+                                        >
+                                            Login
+                                        </Link>
+                                    </p>
+                                )}
+
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };

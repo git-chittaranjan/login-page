@@ -91,11 +91,18 @@ const Login = () => {
     // ==================== Handlers ====================
 
     const handleChange = (e) => {
+
+        clearError();
+        setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
+
         setShowPassword(false);
+
         const { name, value } = e.target;
         const sanitized = name === "otp_code" ? value.replace(/\D/g, "") : value;
         setFormData((prev) => ({ ...prev, [name]: sanitized }));
     };
+
+
 
     const handleSubmit = async (e) => {
 
@@ -109,11 +116,16 @@ const Login = () => {
 
             try {
                 await loginSchema.validate(
-                    { email: formData.email, password: formData.password },
+                    {
+                        email: formData.email,
+                        password: formData.password
+                    },
                     { abortEarly: false }
                 );
 
             } catch (err) {
+
+                clearError();
 
                 if (err.inner) {
                     const errs = {};
@@ -137,6 +149,8 @@ const Login = () => {
 
             } catch (err) {
 
+                clearError();
+
                 if (err.inner) {
                     const errs = {};
                     err.inner.forEach((e) => (errs[e.path] = e.message));
@@ -149,18 +163,29 @@ const Login = () => {
         }
     };
 
+
+
     const handleResendOtp = async () => {
+
         if (resendCooldown > 0 || isLoading) return;
+
         clearError();
+
         setIsResending(true);
         await submitCredentials({ email: formData.email, password: formData.password });
         setIsResending(false);
+
         startCooldown();
     };
 
+
+
     const handleGoBack = () => {
+        clearError();
         clearInterval(cooldownRef.current);
         setResendCooldown(0);
+        setFormData((prev) => ({ ...prev, otp_code: "" }));
+        setFieldErrors({});
         goBackToCredentials();
     };
 
@@ -352,7 +377,7 @@ const Login = () => {
                                             disabled={isLoading}
                                             className="text-sm text-gray-400 hover:text-white transition underline underline-offset-4"
                                         >
-                                            Back to login
+                                            Back to Login Form
                                         </button>
                                     </div>
                                 )}
