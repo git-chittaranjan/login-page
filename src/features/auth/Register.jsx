@@ -259,7 +259,7 @@ const Register = () => {
                             <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center">
                                 <div className="space-y-4 max-w-lg">
                                     <div className="text-5xl font-semibold text-white drop-shadow-lg">
-                                        Welcome Back!
+                                        Create account!
                                     </div>
                                     <p className="text-white text-xl px-6 pt-4 rounded-lg leading-relaxed">
                                         Create your account now to unlock exciting projects, innovative ideas and stay connected with me
