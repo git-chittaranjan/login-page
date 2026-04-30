@@ -205,8 +205,8 @@ const Login = () => {
             >
                 <div className="absolute inset-0 bg-black/40 md:bg-black/70 lg:bg-black/80"></div>
 
-                <div className="flex flex-1 items-center justify-center relative z-10">
-                    <div className="flex max-w-5xl mx-auto">
+                <div className="flex flex-1 items-center justify-center relative z-10 py-8">
+                    <div className="flex max-w-5xl mx-auto w-full">
 
                         {/* Left-side Image Panel */}
                         <div className="hidden md:flex w-1/2 items-center justify-center relative">
