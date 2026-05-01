@@ -16,7 +16,7 @@ export default function ProfilePage() {
 
             <DashboardNavbar />
 
-            <div className="relative mx-auto max-w-6xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
+            <div className="relative min-h-screen mx-auto max-w-6xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
 
                 {/* Top Header */}
                 <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">

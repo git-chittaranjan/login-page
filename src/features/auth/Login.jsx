@@ -6,6 +6,7 @@ import Footer from "../../components/footer";
 import { Eye, EyeOff } from "lucide-react";
 import { useLogin } from "./hooks/useLogin";
 import { CONFIG } from "../../config/env";
+import { toast } from "react-toastify";
 
 
 
@@ -299,7 +300,7 @@ const Login = () => {
                                 />
 
                                 {/* Forgot Password — credentials step only, sits right below password field */}
-                                {!otpSent && (
+                                {/* {!otpSent && (
                                     <div className="flex justify-end -mt-2 mb-2">
                                         <Link
                                             to="/forgot-password"
@@ -308,7 +309,20 @@ const Login = () => {
                                             Forgot Password?
                                         </Link>
                                     </div>
+                                )} */}
+
+                                {!otpSent && (
+                                    <div className="flex justify-end -mt-2 mb-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => toast.warning('Forgot Password is not implemented')}
+                                            className="text-sm text-gray-400 hover:text-white underline bg-transparent border-none cursor-pointer p-0"
+                                        >
+                                            Forgot Password?
+                                        </button>
+                                    </div>
                                 )}
+
 
                                 {/* OTP field — shown only after credentials accepted */}
                                 {otpSent && (

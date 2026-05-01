@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { registerDetails, verifyRegisterOtp } from "../services/authService";
 import APP_ROUTES from "../../../constants/appRoutes";
 import { ERROR_MESSAGES } from "../../../constants/errorMessages";
+import { toast } from "react-toastify";
 
 
 /*
@@ -87,7 +88,16 @@ export function useRegister() {
         try {
             const response = await verifyRegisterOtp(email, payload.otp_code);
 
-            navigate(APP_ROUTES.PUBLIC.LOGIN, { state: { registered: true } });
+            toast.success('Registration successful! Redirecting...', {
+                style: {
+                    color: '#000000',
+                    fontSize: '13px',
+                },
+            });
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000);
 
         } catch (err) {
             setApiError(err);
