@@ -1,6 +1,6 @@
 
 import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { loginWithCredentials, verifyLoginOtp } from "../services/authService";
 import { useAuth } from "../../../contexts/AuthContext";
 import APP_ROUTES from "../../../constants/appRoutes";
@@ -18,8 +18,9 @@ const STEP = Object.freeze({
  * Does NOT return JSX (not a component)
 */
 export function useLogin() {
-    
+
     const navigate = useNavigate();
+    const location = useLocation();
     const { login } = useAuth();
 
     const [step, setStep] = useState(STEP.CREDENTIALS);
@@ -27,6 +28,12 @@ export function useLogin() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null); // { message, traceId }
 
+
+    // Where to send the user after successful login
+    const from = location.state?.from?.pathname ?? APP_ROUTES.PRIVATE.DASHBOARD;
+
+    // Toast message injected by ProtectedRoute when session expired
+    const sessionMessage = location.state?.message ?? null;
 
 
     const clearError = useCallback(() => setError(null), []);
@@ -70,7 +77,7 @@ export function useLogin() {
             const response = await verifyLoginOtp(email, values.otp_code);
 
             login(response.data);
-            navigate(APP_ROUTES.PRIVATE.DASHBOARD, { replace: true });
+            navigate(from, { replace: true });
 
         } catch (err) {
             setApiError(err);
@@ -79,7 +86,7 @@ export function useLogin() {
             setIsLoading(false);
         }
     },
-        [clearError, email, login, navigate]
+        [clearError, email, login, navigate, from]
     );
 
 
@@ -101,5 +108,6 @@ export function useLogin() {
         submitCredentials,
         submitOtp,
         goBackToCredentials,
+        sessionMessage
     };
 }

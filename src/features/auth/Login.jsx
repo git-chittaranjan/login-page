@@ -37,7 +37,16 @@ const Login = () => {
         submitCredentials,
         submitOtp,
         goBackToCredentials,
+        sessionMessage
     } = useLogin();
+
+
+    // Show session-expired toast exactly once, then clear state so it doesn't re-appear on refresh
+    useEffect(() => {
+        if (!sessionMessage) return;
+        toast.error(sessionMessage);
+        window.history.replaceState({}, "");
+    }, []);
 
 
 

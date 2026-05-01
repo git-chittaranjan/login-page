@@ -1,9 +1,33 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import APP_ROUTES from "../constants/appRoutes";
 
-const ProtectedRoute = () => {
-    const { user } = useAuth();
-    return user ? <Outlet /> : <Navigate to="/login" replace />;
-};
+export default function ProtectedRoute({ children }) {
 
-export default ProtectedRoute;
+    const { isAuthenticated, checkAuth } = useAuth();
+    const location = useLocation();
+
+    // Not logged in at all
+    if (!isAuthenticated) {
+        return (
+            <Navigate
+                to={APP_ROUTES.PUBLIC.LOGIN}
+                state={{ from: location, message: "You must be logged in to access this page." }}
+                replace
+            />
+        );
+    }
+
+    // Logged in but token has expired (or within 30s buffer)
+    if (!checkAuth()) {
+        return (
+            <Navigate
+                to={APP_ROUTES.PUBLIC.LOGIN}
+                state={{ from: location, message: "Your session has expired. Please log in again." }}
+                replace
+            />
+        );
+    }
+
+    return children;
+}
