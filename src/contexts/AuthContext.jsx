@@ -9,6 +9,7 @@ export function AuthProvider({ children }) {
 
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
 
 
@@ -17,12 +18,14 @@ export function AuthProvider({ children }) {
         setAccessToken(access_token, expires_at);
         setUser({ user_id, email, name });
         setIsAuthenticated(true);
+        setIsLoggingOut(false);  
     }, []);
 
     const logout = useCallback(() => {
         clearAccessToken();
         setUser(null);
         setIsAuthenticated(false);
+        setIsLoggingOut(true);
     }, []);
 
     const checkAuth = useCallback(() => {
@@ -61,6 +64,7 @@ export function AuthProvider({ children }) {
                 if (e.data?.type === "LOGOUT") {
                     setUser(null);
                     setIsAuthenticated(false);
+                    setIsLoggingOut(true); 
                 }
             });
         } catch {

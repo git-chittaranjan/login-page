@@ -122,23 +122,23 @@ const projects = [
         enableVisit: true,
         enableCode: true
     },
-    {
-        id: 8,
-        title: "Offer Management System",
-        description: "This project is a Personalized Offer Management System built with ASP.NET Core Web APIs, React, and SQL Server. It dynamically delivers customized user offers based on preferences and data, ensuring an engaging and data-driven experience.",
-        technologies: [
-            "SQL Server",
-            "ASP.NET Core",
-            "React",
-            "ADO.NET",
-            "Offers"
-        ],
-        image: "/assets/dashboard-projects/offers-implementation.png",
-        visitLink: "https://www.projects.offers-implementation.chittaranjansaha.com/",
-        codeLink: "https://github.com/git-chittaranjan/offers-implementation-api",
-        enableVisit: true,
-        enableCode: true
-    },
+    // {
+    //     id: 8,
+    //     title: "Offer Management System",
+    //     description: "This project is a Personalized Offer Management System built with ASP.NET Core Web APIs, React, and SQL Server. It dynamically delivers customized user offers based on preferences and data, ensuring an engaging and data-driven experience.",
+    //     technologies: [
+    //         "SQL Server",
+    //         "ASP.NET Core",
+    //         "React",
+    //         "ADO.NET",
+    //         "Offers"
+    //     ],
+    //     image: "/assets/dashboard-projects/offers-implementation.png",
+    //     visitLink: "https://www.projects.offers-implementation.chittaranjansaha.com/",
+    //     codeLink: "https://github.com/git-chittaranjan/offers-implementation-api",
+    //     enableVisit: true,
+    //     enableCode: true
+    // },
     {
         id: 9,
         title: "CRUD Application using MVC",

@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import { useAuth } from '../contexts/AuthContext';
 import AvatarButton from './avatar-card';
 
 const Navbar = () => {
+
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -23,10 +27,31 @@ const Navbar = () => {
             ? 'block px-4 rounded-2xl text-orange-500 active:bg-gray-600'
             : 'block px-4 rounded-2xl text-white hover:text-orange-500 active:bg-gray-600';
 
+
+
     // Logout handler — use useNavigate
     function handleLogout() {
-        localStorage.clear();
-        navigate('/login', { replace: true }); // replace = true, (Before logout /home → /profile → /about, After logout /home → /profile → /login)
+
+        // Broadcast to other tabs
+        try {
+            const channel = new BroadcastChannel("auth_session");
+            channel.postMessage({ type: "LOGOUT" });
+            channel.close();
+
+        } catch {
+            // degrade gracefully
+        }
+
+        // ProtectedRoute sees isLoggingOut and renders null instead of redirecting
+        logout();
+
+        toast.success("You've been logged out. Redirecting...", {
+            duration: LOGOUT_DELAY_MS,
+        });
+
+        setTimeout(() => {
+            navigate('/login', { replace: true });
+        }, 3000);
     }
 
     return (

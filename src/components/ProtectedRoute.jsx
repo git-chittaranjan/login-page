@@ -4,8 +4,11 @@ import APP_ROUTES from "../constants/appRoutes";
 
 export default function ProtectedRoute({ children }) {
 
-    const { isAuthenticated, checkAuth } = useAuth();
+    const { isAuthenticated, checkAuth, isLoggingOut } = useAuth();
     const location = useLocation();
+
+    // User clicked logout — let the toast + 3s timer play out, don't redirect
+    if (isLoggingOut) return null;
 
     // Not logged in at all
     if (!isAuthenticated) {
