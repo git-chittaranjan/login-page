@@ -16,6 +16,7 @@ const EXPIRY_BUFFER_MS = 30 * 1000;
 
 
 export const setAccessToken = (token, expiresAt) => {
+
     if (!token || typeof token !== "string") {
         throw new Error("[AUTH ERROR] Invalid access token");
     }
@@ -30,9 +31,22 @@ export const setAccessToken = (token, expiresAt) => {
         }
 
         _EXPIRES_AT = parsedDate;
+
     } else {
         _EXPIRES_AT = null;
     }
+
+
+    // Set the token in cookie -- only for developement
+    const expiryDate = expiresAt ? new Date(expiresAt).toUTCString() : "";
+
+    document.cookie = `
+        access_token=${token};
+        path=/;
+        expires=${expiryDate};
+        Secure;
+        SameSite=Strict
+    `;
 };
 
 

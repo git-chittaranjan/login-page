@@ -18,17 +18,12 @@ export default function AppRoutes() {
             {/* Public routes */}
             <Route path={APP_ROUTES.PUBLIC.LOGIN} element={<Login />} />
             <Route path={APP_ROUTES.PUBLIC.REGISTER} element={<Register />} />
-            <Route path={APP_ROUTES.PRIVATE.DASHBOARD} element={<Dashboard name="Chittaranjan Saha" />} />
+            <Route path={APP_ROUTES.PRIVATE.DASHBOARD} element={<Dashboard />} />
             <Route path={APP_ROUTES.PRIVATE.CONTACT} element={<Contact />} />
-            
+
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to={APP_ROUTES.PUBLIC.LOGIN} replace />} />
-
-            {/* Protected routes */}
-            {/* <Route element={<ProtectedRoute />}>
-                <Route path={APP_ROUTES.DASHBOARD} element={<Dashboard />} />
-            </Route> */}
 
         </Routes>
     );

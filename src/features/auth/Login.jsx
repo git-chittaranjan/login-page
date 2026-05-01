@@ -91,13 +91,12 @@ const Login = () => {
     // ==================== Handlers ====================
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
 
         clearError();
         setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
-
         setShowPassword(false);
 
-        const { name, value } = e.target;
         const sanitized = name === "otp_code" ? value.replace(/\D/g, "") : value;
         setFormData((prev) => ({ ...prev, [name]: sanitized }));
     };
@@ -230,7 +229,7 @@ const Login = () => {
 
 
                         {/* Right-side Login Box */}
-                        <div className="w-full md:w-90 bg-black p-8 pb-30 md:rounded-r-xl text-white">
+                        <div className={`w-full md:w-90 bg-black p-8 md:rounded-r-xl text-white ${!otpSent ? "pb-25" : ""}`}>
 
                             <div className="text-2xl mb-4 text-center w-full text-white font-bold">
                                 {otpSent ? "Verify OTP" : "Login"}
