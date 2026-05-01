@@ -6,6 +6,7 @@ import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import Dashboard from './features/dashboard/Dashboard';
 import Contact from './features/contact-email/contact';
+import ProfilePage from './features/profile/ProfilePage';
 
 
 export default function AppRoutes() {
@@ -20,6 +21,7 @@ export default function AppRoutes() {
             <Route path={APP_ROUTES.PUBLIC.REGISTER} element={<Register />} />
             <Route path={APP_ROUTES.PRIVATE.DASHBOARD} element={<Dashboard />} />
             <Route path={APP_ROUTES.PRIVATE.CONTACT} element={<Contact />} />
+            <Route path={APP_ROUTES.PRIVATE.PROFILE} element={<ProfilePage />} />
 
 
             {/* Fallback */}

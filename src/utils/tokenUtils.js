@@ -39,14 +39,7 @@ export const setAccessToken = (token, expiresAt) => {
 
     // Set the token in cookie -- only for developement
     const expiryDate = expiresAt ? new Date(expiresAt).toUTCString() : "";
-
-    document.cookie = `
-        access_token=${token};
-        path=/;
-        expires=${expiryDate};
-        Secure;
-        SameSite=Strict
-    `;
+    document.cookie = `access_token=${token}; path=/; expires=${expiryDate}; Secure; SameSite=Strict`
 };
 
 
@@ -60,6 +53,7 @@ export const getAccessToken = () => {
 export const clearAccessToken = () => {
     _ACCESS_TOKEN = null;
     _EXPIRES_AT = null;
+    document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict";
 };
 
 
