@@ -7,8 +7,14 @@ export default function ProtectedRoute({ children }) {
     const { isAuthenticated, checkAuth, isLoggingOut } = useAuth();
     const location = useLocation();
 
+
+
     // User clicked logout — let the toast + 3s timer play out, don't redirect
-    if (isLoggingOut) return null;
+    if (isLoggingOut) {
+        return null;
+    }
+
+
 
     // Not logged in at all
     if (!isAuthenticated) {
@@ -20,6 +26,8 @@ export default function ProtectedRoute({ children }) {
             />
         );
     }
+
+
 
     // Logged in but token has expired (or within 30s buffer)
     if (!checkAuth()) {

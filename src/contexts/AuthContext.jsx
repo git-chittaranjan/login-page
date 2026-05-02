@@ -18,8 +18,10 @@ export function AuthProvider({ children }) {
         setAccessToken(access_token, expires_at);
         setUser({ user_id, email, name });
         setIsAuthenticated(true);
-        setIsLoggingOut(false);  
+        setIsLoggingOut(false);
     }, []);
+
+
 
     const logout = useCallback(() => {
         clearAccessToken();
@@ -27,6 +29,8 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(false);
         setIsLoggingOut(true);
     }, []);
+
+
 
     const checkAuth = useCallback(() => {
         if (isTokenExpired()) {
@@ -62,9 +66,7 @@ export function AuthProvider({ children }) {
             channel = new BroadcastChannel("auth_session");
             channel.addEventListener("message", (e) => {
                 if (e.data?.type === "LOGOUT") {
-                    setUser(null);
-                    setIsAuthenticated(false);
-                    setIsLoggingOut(true); 
+                    logout();
                 }
             });
         } catch {
@@ -76,7 +78,15 @@ export function AuthProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, checkAuth }}>
+        <AuthContext.Provider value={{
+            user,
+            isAuthenticated,
+            login,
+            logout,
+            checkAuth,
+            isLoggingOut,
+            setIsLoggingOut
+        }}>
             {children}
         </AuthContext.Provider>
     );

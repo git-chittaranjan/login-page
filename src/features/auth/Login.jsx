@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import InputField from "../../components/InputField";
 import Navbar from "../../components/pre-auth-navbar";
 import Footer from "../../components/footer";
@@ -7,6 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useLogin } from "./hooks/useLogin";
 import { CONFIG } from "../../config/env";
 import { toast } from "react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
 
 
 
@@ -41,11 +42,28 @@ const Login = () => {
     } = useLogin();
 
 
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const { setIsLoggingOut } = useAuth();
+
+
+
     // Show session-expired toast exactly once, then clear state so it doesn't re-appear on refresh
     useEffect(() => {
-        if (!sessionMessage) return;
-        toast.error(sessionMessage);
-        window.history.replaceState({}, "");
+
+        setIsLoggingOut(false);
+
+        if (sessionMessage) {
+
+            toast.error(sessionMessage);
+
+            // Clear router state so toast doesn't reappear on refresh
+            navigate(location.pathname, {
+                replace: true,
+                state: {}
+            });
+        }
     }, []);
 
 
