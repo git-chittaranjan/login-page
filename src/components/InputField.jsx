@@ -5,7 +5,7 @@ const InputField = ({ label, type = "text", name, value, onChange, error, rightE
 
   return (
     <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-950 lg:text-gray-100">{label}</label>
+      <label htmlFor={name} className="block text-sm font-medium text-gray-950 md:text-gray-100">{label}</label>
 
       <div className="relative">
         <input

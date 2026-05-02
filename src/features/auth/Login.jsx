@@ -234,7 +234,7 @@ const Login = () => {
                 <div className="block absolute inset-0 bg-black/40 lg:bg-black/80" />
 
                 {/* Content area */}
-                <div className="flex flex-1 items-start md:items-center justify-center relative z-10 py-10 px-10 md:px-0">
+                <div className="flex flex-1 items-start md:items-center justify-center relative z-10 py-10 px-6 md:px-0">
                     <div className="flex max-w-5xl mx-auto w-full">
 
                         {/* Left image panel — md+ only */}
