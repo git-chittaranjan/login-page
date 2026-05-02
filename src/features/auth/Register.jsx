@@ -442,7 +442,7 @@ const Register = () => {
 
                                 {otpSent && (
                                     <div className="flex flex-col items-center gap-4 mt-8">
-                                        <div className="text-sm text-gray-400">
+                                        <div className="text-sm text-gray-600 md:text-gray-400">
                                             {resendCooldown > 0 ? (
                                                 <p className="flex items-center gap-1">
                                                     <span>Resend OTP in</span>
@@ -462,7 +462,7 @@ const Register = () => {
                                             )}
                                         </div>
 
-                                        <div className="w-16 h-px bg-gray-200 md:bg-gray-700" />
+                                        <div className="w-16 h-px bg-gray-400 md:bg-gray-700" />
 
                                         <button
                                             type="button"
