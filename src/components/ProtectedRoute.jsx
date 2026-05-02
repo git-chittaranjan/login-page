@@ -9,7 +9,7 @@ export default function ProtectedRoute({ children }) {
 
 
 
-    // User clicked logout — let the toast + 3s timer play out, don't redirect
+    // User clicked Logout button manually 
     if (isLoggingOut) {
         return null;
     }
