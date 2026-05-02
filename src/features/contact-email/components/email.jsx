@@ -27,7 +27,7 @@ const GetInTouch = () => {
                 },
                 '5Bj6e-jf0JfYMF5Z9'
             );
-            setStatus('Thank you for reaching out to me...');
+            setStatus('Thank you for reaching out to me.');
             toast.success('Message sent successfully!');
 
             // Clear input fields on success
@@ -131,7 +131,7 @@ const GetInTouch = () => {
                                 </button>
                             </div>
 
-                            {status && <p className="text-center text-sm mt-8 text-green-600">{status}</p>}
+                            {status && <p className="text-center text-sm mt-8 text-green-400">{status}</p>}
                         </form>
                     </div>
                 </div>

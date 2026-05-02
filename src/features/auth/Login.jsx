@@ -227,49 +227,53 @@ const Login = () => {
             <Navbar title="Register" url="/register" />
 
             <div
-                className="relative min-h-screen w-full flex flex-col bg-cover bg-center pt-20"
+                className="relative min-h-screen w-full flex flex-col bg-cover bg-center bg-gray-50 pt-24 md:pt-16"
                 style={{ backgroundImage: `url('/assets/login_bg_full.png')` }}
             >
-                <div className="absolute inset-0 bg-black/40 md:bg-black/70 lg:bg-black/80"></div>
+                {/* Dark overlay — md+ only */}
+                <div className="block absolute inset-0 bg-black/40 lg:bg-black/80" />
 
-                <div className="flex flex-1 items-center justify-center relative z-10 py-8">
+                {/* Content area */}
+                <div className="flex flex-1 items-start md:items-center justify-center relative z-10 py-10 px-10 md:px-0">
                     <div className="flex max-w-5xl mx-auto w-full">
 
-                        {/* Left-side Image Panel */}
+                        {/* Left image panel — md+ only */}
                         <div className="hidden md:flex w-1/2 items-center justify-center relative">
                             <img
                                 src="/assets/login_bg_left.png"
                                 alt="Left panel image"
                                 className="w-full h-full object-cover rounded-l-xl"
                             />
-                            <div className="absolute inset-0 bg-black/25 z-20"></div>
+                            <div className="absolute inset-0 bg-black/25 z-20" />
                             <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-8 text-center">
                                 <div className="space-y-4 max-w-lg">
                                     <div className="text-5xl font-semibold text-white drop-shadow-lg">
                                         Welcome Back!
                                     </div>
-                                    <p className="text-white text-xl px-6 pt-4 rounded-lg leading-relaxed">
+                                    <p className="text-white text-xl px-6 pt-4 leading-relaxed">
                                         Please enter your credentials to access your dashboard
                                     </p>
                                 </div>
                             </div>
                         </div>
 
+                        {/* Form card */}
+                        <div className={`w-full max-w-sm mx-auto bg-zinc-100 rounded-2xl shadow-lg border border-gray-200
+                            md:max-w-none md:w-90 md:mx-0 md:bg-black md:rounded-l-none md:rounded-r-xl md:shadow-none md:border-0
+                            p-6 md:p-8 text-gray-900 font-sans md:text-white ${!otpSent ? "pb-16 md:pb-24" : ""}`}>
 
-                        {/* Right-side Login Box */}
-                        <div className={`w-full md:w-90 bg-black p-8 md:rounded-r-xl text-white ${!otpSent ? "pb-25" : ""}`}>
 
-                            <div className="text-2xl mb-4 text-center w-full text-white font-bold">
+                            {/* Form Title */}
+                            <div className="text-2xl mb-4 text-center w-full font-bold text-gray-900 md:text-white">
                                 {otpSent ? "Verify OTP" : "Login"}
                             </div>
 
-
-                            {/* Masked email confirmation */}
-                            <p className="text-sm text-gray-400 text-center mb-8">
+                            {/* Form Subtitle */}
+                            <p className="text-sm text-gray-600 md:text-gray-400 text-center mb-8">
                                 {otpSent ? (
                                     <>
                                         OTP sent to{" "}
-                                        <span className="text-white font-medium">
+                                        <span className="text-gray-900 md:text-white font-medium">
                                             {maskEmail(email || formData.email)}
                                         </span>
                                     </>
@@ -278,8 +282,7 @@ const Login = () => {
                                 )}
                             </p>
 
-
-                            {/* API error messages */}
+                            {/* Display API error */}
                             {error && (
                                 <div className="text-red-500 mb-2">
                                     <p>{error.message}</p>
@@ -290,7 +293,6 @@ const Login = () => {
                                     )}
                                 </div>
                             )}
-
 
                             <form noValidate onSubmit={handleSubmit}>
                                 <InputField
@@ -317,7 +319,7 @@ const Login = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword((prev) => !prev)}
-                                            className="text-gray-500 hover:text-white focus:outline-none"
+                                            className="text-gray-400 hover:text-gray-700 md:hover:text-white focus:outline-none"
                                             aria-label={showPassword ? "Hide password" : "Show password"}
                                             tabIndex={-1}
                                         >
@@ -326,32 +328,18 @@ const Login = () => {
                                     }
                                 />
 
-                                {/* Forgot Password — credentials step only, sits right below password field */}
-                                {/* {!otpSent && (
-                                    <div className="flex justify-end -mt-2 mb-2">
-                                        <Link
-                                            to="/forgot-password"
-                                            className="text-sm text-gray-400 hover:text-white underline"
-                                        >
-                                            Forgot Password?
-                                        </Link>
-                                    </div>
-                                )} */}
-
                                 {!otpSent && (
                                     <div className="flex justify-end -mt-2 mb-2">
                                         <button
                                             type="button"
                                             onClick={() => toast.warning('Forgot Password is not implemented')}
-                                            className="text-sm text-gray-400 hover:text-white underline bg-transparent border-none cursor-pointer p-0"
+                                            className="text-sm text-gray-600 md:text-gray-400 hover:text-gray-700 md:hover:text-white underline bg-transparent border-none cursor-pointer p-0"
                                         >
                                             Forgot Password?
                                         </button>
                                     </div>
                                 )}
 
-
-                                {/* OTP field — shown only after credentials accepted */}
                                 {otpSent && (
                                     <InputField
                                         label="OTP"
@@ -371,7 +359,7 @@ const Login = () => {
                                     <button
                                         type="submit"
                                         disabled={isLoading || (otpSent && formData.otp_code.length !== 6)}
-                                        className="w-2/3 bg-emerald-900 text-white py-2 px-4 rounded mt-4 font-bold transition duration-200 ease-in-out hover:bg-emerald-800 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-emerald-900 disabled:hover:scale-100"
+                                        className="w-2/3 bg-emerald-700 md:bg-emerald-900 text-white py-2 px-4 rounded mt-4 font-bold transition duration-200 ease-in-out hover:bg-emerald-600 md:hover:bg-emerald-800 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-emerald-700 md:disabled:hover:bg-emerald-900 disabled:hover:scale-100"
                                     >
                                         {isLoading
                                             ? isResending ? "Resending OTP" : otpSent ? "Verifying" : "Sending OTP"
@@ -380,18 +368,13 @@ const Login = () => {
                                     </button>
                                 </div>
 
-
-
-                                {/* OTP step — Resend + Back */}
                                 {otpSent && (
                                     <div className="flex flex-col items-center gap-4 mt-8">
-
-                                        {/* Resend OTP / Countdown */}
                                         <div className="text-sm text-gray-400">
                                             {resendCooldown > 0 ? (
                                                 <p className="flex items-center gap-1">
                                                     <span>Resend OTP in</span>
-                                                    <span className="font-semibold text-white tracking-wide">
+                                                    <span className="font-semibold text-gray-800 md:text-white tracking-wide">
                                                         {formatCountdown(resendCooldown)}
                                                     </span>
                                                 </p>
@@ -400,49 +383,42 @@ const Login = () => {
                                                     type="button"
                                                     onClick={handleResendOtp}
                                                     disabled={isLoading}
-                                                    className="px-4 py-1.5 font-sans rounded-md bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 hover:text-emerald-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="px-4 py-1.5 font-sans rounded-md bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 hover:text-emerald-600 md:hover:text-emerald-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
                                                     {isResending ? "Resending…" : "Resend OTP"}
                                                 </button>
                                             )}
                                         </div>
 
-                                        {/* Divider */}
-                                        <div className="w-16 h-px bg-gray-700"></div>
+                                        <div className="w-16 h-px bg-gray-200 md:bg-gray-700" />
 
-                                        {/* Back to login */}
                                         <button
                                             type="button"
                                             onClick={handleGoBack}
                                             disabled={isLoading}
-                                            className="text-sm text-gray-400 hover:text-white transition underline underline-offset-4"
+                                            className="text-sm text-gray-600 lg:text-gray-400 hover:text-gray-700 md:hover:text-white transition underline underline-offset-4"
                                         >
                                             Back to Login Form
                                         </button>
                                     </div>
                                 )}
 
-
-                                {/* Don't have an account — credentials step only */}
                                 {!otpSent && (
-                                    <p className="text-sm text-gray-400 text-center mt-8">
+                                    <p className="text-sm text-gray-600 md:text-gray-400 text-center mt-8">
                                         Don't have an account?{" "}
                                         <Link
                                             to="/register"
-                                            className="text-emerald-600 hover:text-emerald-300 underline font-medium"
+                                            className="text-emerald-600 hover:text-emerald-500 underline font-medium"
                                         >
                                             Register
                                         </Link>
                                     </p>
                                 )}
-
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* <Footer /> */}
         </div>
     );
 };
